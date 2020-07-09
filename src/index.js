@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import morgan from 'morgan';
+//import morgan from 'morgan';
 import multer from 'multer';
 import { v4 as uuidv4} from 'uuid';
 import path from 'path';
