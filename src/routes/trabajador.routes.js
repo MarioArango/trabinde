@@ -18,5 +18,6 @@ router.put('/editar-foto-perfil-trabajador', trabajadorController.editar_foto_pe
 
 //ITERACION 4
 router.post('/denunciar-solicitante', trabajadorController.denunciar_solicitante);
+router.get('/listar-contratos-con-solicitantes', trabajadorController.listar_contratos_con_solicitantes);
 
 export default router;

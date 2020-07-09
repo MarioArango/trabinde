@@ -21,5 +21,6 @@ router.get('/perfil-solicitante', solicitanteController.perfil_solicitante);
 
 //ITERACION 4
 router.post('/denunciar-trabajador', solicitanteController.denunciar_trabajador);
+router.get('/listar-contratos-con-trabajadores', solicitanteController.listar_contratos_con_trabajadores);
 
 export default router;

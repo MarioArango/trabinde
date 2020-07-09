@@ -203,4 +203,20 @@ trabajadorController.denunciar_solicitante = (req, res) => {
     })
 };
 
+trabajadorController.listar_contratos_con_solicitantes = (req, res) => {
+    
+    const { _idTrabajadores } = req.body;
+    const sql = 'call SP_GET_ListarContratosConSolicitantes(?)';
+
+    mysql.query(sql, [_idTrabajadores], (error, data) => {
+        if (!error) {
+            res.status(200).send({ status: "Success", message: data[0], code: 200 });
+            
+        } else {
+            res.status(400).send({ status: "Error", message: "Error en el servidor", code: 400 });
+        }
+    }
+    );
+};
+
 export default trabajadorController;
