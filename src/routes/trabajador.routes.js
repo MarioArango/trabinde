@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import trabajadorController from '../controllers/trabajadorController';
+import verificarToken from '../middleware/verificarToken';
 
 const router = Router();
 
@@ -9,15 +10,15 @@ router.get('/login-trabajador', trabajadorController.login_trabajador);
 
 //ITERACION 2
 
-router.post('/subir-publicacion-galeria', trabajadorController.subir_publicacion_galeria);
+router.post('/subir-publicacion-galeria', verificarToken, trabajadorController.subir_publicacion_galeria);
 
-router.get('/perfil-publico-trabajador', trabajadorController.perfil_publico_trabajador);
-router.get('/perfil-privado-trabajador', trabajadorController.perfil_privado_trabajador);
+router.get('/perfil-publico-trabajador', verificarToken, trabajadorController.perfil_publico_trabajador);
+router.get('/perfil-privado-trabajador', verificarToken, trabajadorController.perfil_privado_trabajador);
 
-router.put('/editar-foto-perfil-trabajador', trabajadorController.editar_foto_perfil_trabajador);
+router.put('/editar-foto-perfil-trabajador', verificarToken, trabajadorController.editar_foto_perfil_trabajador);
 
 //ITERACION 4
-router.post('/denunciar-solicitante', trabajadorController.denunciar_solicitante);
-router.get('/listar-contratos-con-solicitantes', trabajadorController.listar_contratos_con_solicitantes);
+router.post('/denunciar-solicitante', verificarToken, trabajadorController.denunciar_solicitante);
+router.get('/listar-contratos-con-solicitantes', verificarToken, trabajadorController.listar_contratos_con_solicitantes);
 
 export default router;
