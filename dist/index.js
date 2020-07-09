@@ -40,8 +40,8 @@ var storage = _multer["default"].diskStorage({
 }); //MIDDLEWARES
 
 
-app.use((0, _cors["default"])());
-app.use((0, _morgan["default"])('dev'));
+app.use((0, _cors["default"])()); //app.use(morgan('dev'));
+
 app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
   extended: false
@@ -67,6 +67,9 @@ app.use((0, _multer["default"])({
 
 app.set('port', process.env.PORT || 6000); //ROUTES
 
+app.use('/', function (req, res) {
+  res.send('Bienvenido');
+});
 app.use('/api/administrador', _administrador["default"]);
 app.use('/api/solicitante', _solicitante["default"]);
 app.use('/api/trabajador', _trabajador["default"]); //INITIALIZATION
