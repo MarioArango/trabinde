@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.10.4",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.22.0",
     "cors": "^2.8.5",
@@ -32,7 +33,6 @@
     "@babel/node": "^7.10.4",
     "@babel/plugin-transform-runtime": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
-    "@babel/runtime": "^7.10.4",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4"
   }
