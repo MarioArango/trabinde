@@ -65,9 +65,6 @@ app.use((0, _multer["default"])({
 
 app.set('port', process.env.PORT || 6000); //ROUTES
 
-app.use('/', function (req, res) {
-  res.send('Bienvenido');
-});
 app.use('/api/administrador', _administrador["default"]);
 app.use('/api/solicitante', _solicitante["default"]);
 app.use('/api/trabajador', _trabajador["default"]); //INITIALIZATION

@@ -45,9 +45,7 @@ app.use(multer({
 app.set('port', process.env.PORT || 6000);
 
 //ROUTES
-app.use('/', (req, res) => {
-    res.send('Bienvenido');
-})
+
 app.use('/api/administrador', administradorRoutes);
 app.use('/api/solicitante', solicitanteRoutes);
 app.use('/api/trabajador', trabajadorRoutes);
