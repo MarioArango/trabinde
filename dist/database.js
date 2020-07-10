@@ -16,7 +16,6 @@ _dotenv["default"].config();
 //import util from 'util';
 var mysqlConnection = _mysql["default"].createConnection({
   host: 'us-cdbr-east-02.cleardb.com',
-  port: 3306,
   user: 'b6eb6851569774',
   password: '21d8ae96',
   database: 'heroku_677a3052d794aa4',
