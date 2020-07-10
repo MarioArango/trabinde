@@ -1,6 +1,7 @@
-import { Router } from 'express';
-import administradorController from '../controllers/administradorController';
-import verificarToken from '../middleware/verificarToken';
+const { Router } = require('express');
+const administradorController = require('../controllers/administradorController')
+const verificarToken = require('../middleware/verificarToken')
+
 const router = Router();
 
 //ITERACION 3
@@ -18,4 +19,4 @@ router.get('/numero-denuncias-trabajador', administradorController.numero_denunc
 router.get('/listar-denuncias-a-solicitantes', verificarToken, administradorController.listar_denuncias_a_solicitantes);
 router.get('/listar-denuncias-a-trabajadores', verificarToken, administradorController.listar_denuncias_a_trabajadores);
 
-export default router;
+module.exports = router;

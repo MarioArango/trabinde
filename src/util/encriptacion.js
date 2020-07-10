@@ -1,11 +1,12 @@
-import bcrypt from 'bcryptjs';
+const bcrypt = require('bcryptjs');
 
 const encriptacion = {};
 
-encriptacion.password = async (password) => {
-    const salt = await bcrypt.genSalt(10);
-    const passwordEncriptado = await bcrypt.hash(password, salt);
-    return passwordEncriptado;
+encriptacion.password = (password) => {
+    bcrypt.genSalt(10).then(salt => {
+        const passwordEncriptado = bcrypt.hash(password, salt);
+        return passwordEncriptado;
+    })
 };
 
-export default encriptacion;
+module.exports = encriptacion;

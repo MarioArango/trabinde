@@ -1,8 +1,8 @@
-import mysql from '../database';
-import token from '../util/crearToken';
-import encriptacion from '../util/encriptacion';
-import cloudinary from 'cloudinary';
-import bcrypt from 'bcryptjs';
+const mysql = require('../database');
+const token = require('../util/crearToken');
+const encriptacion = require('../util/encriptacion');
+const cloudinary = require('cloudinary');
+const bcrypt = require('bcryptjs');
 
 cloudinary.config({
     cloud_name: 'drne6kexd',
@@ -10,7 +10,7 @@ cloudinary.config({
     api_secret: '_3Q8ijH8FhIfvf39YGnzAroj7Cs'
 })
 
-import fs from 'fs-extra';
+const fs = require('fs-extra');
 
 const solicitanteController = {};
 
@@ -57,14 +57,13 @@ solicitanteController.login_solicitante = (req, res) => {
 
     const sql2 = 'SELECT s.emailSolicitantes, s.password FROM solicitantes AS s WHERE s.emailSolicitantes = ?';
     
-    mysql.getConnection(sql2, [_emailSolicitantes], async (error, dat) => {
+    mysql.getConnection(sql2, [_emailSolicitantes], (error, dat) => {
 
         if (!error){
             if(dat.length != 0){
                 const passwordEncriptado = dat[0].password;
-                const verf = await bcrypt.compare(_password, passwordEncriptado);
-
-                if(verf){
+                bcrypt.compare(_password, passwordEncriptado).then(verf => {
+                    if(verf){
                     mysql.getConnection(sql, [_emailSolicitantes, passwordEncriptado], (error, data) => {
                             if (!error) {
                                 const tkn = token.signToken(data[0][0].idSolicitantes);
@@ -76,6 +75,7 @@ solicitanteController.login_solicitante = (req, res) => {
                 }else{
                     res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
                 }
+                })  
             }else{
                 res.status(400).send({ status: "Error", message: "Email no existente", code: 400 });
             }
@@ -180,5 +180,4 @@ solicitanteController.listar_contratos_con_trabajadores = (req, res) => {
     );
 };
 
-
-export default solicitanteController;
+module.exports = solicitanteController;

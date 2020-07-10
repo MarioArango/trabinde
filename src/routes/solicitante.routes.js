@@ -1,6 +1,6 @@
-import { Router } from 'express';
-import solicitanteController from '../controllers/solicitanteController';
-import verificarToken from '../middleware/verificarToken';
+const { Router } = require('express');
+const solicitanteController = require('../controllers/solicitanteController');
+const verificarToken = require('../middleware/verificarToken');
 
 const router = Router();
 
@@ -23,4 +23,4 @@ router.get('/perfil-solicitante', verificarToken, solicitanteController.perfil_s
 router.post('/denunciar-trabajador', verificarToken, solicitanteController.denunciar_trabajador);
 router.get('/listar-contratos-con-trabajadores', verificarToken, solicitanteController.listar_contratos_con_trabajadores);
 
-export default router;
+module.exports = router;

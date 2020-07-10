@@ -1,6 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import mysql from 'mysql';
+//import dotenv from 'dotenv';
+//dotenv.config();
+const mysql = require('mysql');
 //import util from 'util';
 
 const mysqlConnection = mysql.createPool({
@@ -21,4 +21,5 @@ const mysqlConnection = mysql.createPool({
 
 //const query = util.promisify(mysqlConnection.query).bind(mysqlConnection);
 
-export default mysqlConnection;
+
+module.exports = mysqlConnection;

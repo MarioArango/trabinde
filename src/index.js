@@ -1,15 +1,14 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import express from 'express';
+//import dotenv from 'dotenv';
+//dotenv.config();
+const express = require('express');
 //import morgan from 'morgan';
-import multer from 'multer';
-import { v4 as uuidv4} from 'uuid';
-import path from 'path';
-import cors from 'cors';
-import cloudinary from 'cloudinary';
-import administradorRoutes from './routes/administrador.routes';
-import solicitanteRoutes from './routes/solicitante.routes';
-import trabajadorRoutes from './routes/trabajador.routes';
+const multer = require('multer');
+const { v4} = require('uuid');
+const path = require('path');
+const cors = require('cors');
+const administradorRoutes = require('./routes/administrador.routes');
+const solicitanteRoutes = require('./routes/solicitante.routes');
+const trabajadorRoutes = require('./routes/trabajador.routes');
 
 const app = express();
 
@@ -17,7 +16,7 @@ const app = express();
 const storage = multer.diskStorage({
     destination: path.join(__dirname, 'public/uploads'),
     filename: (req, file, cb) => {
-        cb(null, uuidv4()+path.extname(file.originalname).toLocaleLowerCase());
+        cb(null, v4()+path.extname(file.originalname).toLocaleLowerCase());
     }
 })
 
@@ -58,15 +57,15 @@ app.use('/api/solicitante', solicitanteRoutes);
 app.use('/api/trabajador', trabajadorRoutes);
 
 //INITIALIZATION
-const init = async () => {
-    try {
-        await app.listen(app.get('port'));
-        console.log(`Conectado al servidor en el puerto ${app.get('port')}`);
-        
-    } catch (error) {
-        console.log(`No se pudo conectar al servidor`);
-        console.log(`Error: ${error}`);
-    }
+const init = () => {
+    
+        app.listen(app.get('port'), (error ) => {
+            if(!error){
+               console.log(`Conectado al servidor en el puerto ${app.get('port')}`); 
+            }else{
+                console.log(`Error en el servidor: ${error}`);
+            }
+        });
 }
 
 init();

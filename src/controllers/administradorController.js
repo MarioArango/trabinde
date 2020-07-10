@@ -1,5 +1,5 @@
-import mysql from '../database';
-import token from '../util/crearToken';
+const mysql = require('../database');
+const token = require('../util/crearToken');
 
 const administradorController = {};
 
@@ -144,5 +144,4 @@ administradorController.listar_denuncias_a_trabajadores = (req, res) => {
         }
     })
 };
-
-export default administradorController;
+module.exports = administradorController;

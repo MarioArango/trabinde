@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import moment from 'moment'; //NOS AYUDA CON LAS FECHAS
+const jwt = require('jsonwebtoken');
+const moment = require('moment'); //NOS AYUDA CON LAS FECHAS
 
 const token = {};
 
@@ -14,4 +14,5 @@ token.signToken = (id) => {
     return jwt.sign(payload, 'a$QYgmeE$qV');
 };
 
-export default token;
+
+module.exports = token;

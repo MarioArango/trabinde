@@ -1,8 +1,8 @@
-import mysql from '../database';
-import token from '../util/crearToken';
-import encriptacion from '../util/encriptacion';
-import cloudinary from 'cloudinary';
-import bcrypt from 'bcryptjs';
+const mysql = require('../database');
+const token = require('../util/crearToken');
+const encriptacion = require('../util/encriptacion');
+const cloudinary = require('cloudinary');
+const bcrypt = require('bcryptjs');
 
 cloudinary.config({
     cloud_name: 'drne6kexd',
@@ -10,7 +10,7 @@ cloudinary.config({
     api_secret: '_3Q8ijH8FhIfvf39YGnzAroj7Cs'
 })
 
-import fs from 'fs-extra';
+const fs = require('fs-extra');
 
 const trabajadorController = {};
 
@@ -67,25 +67,25 @@ trabajadorController.login_trabajador = (req, res) => {
 
     const sql2 = 'SELECT t.emailTrabajadores, t.password FROM trabajadores AS t WHERE t.emailTrabajadores = ?';
 
-    mysql.getConnection(sql2, [_emailTrabajadores], async (error, dat) => {
+    mysql.getConnection(sql2, [_emailTrabajadores], (error, dat) => {
 
         if (!error) {
             if (dat.length != 0) {
                 const passwordEncriptado = dat[0].password;
-                const verf = await bcrypt.compare(_password, passwordEncriptado);
-
-                if (verf) {
-                    mysql.getConnection(sql, [_emailTrabajadores, passwordEncriptado], (error, data) => {
-                        if (!error) {
-                            const tkn = token.signToken(data[0][0].idTrabajadores);
-                            res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
-                        } else {
-                            res.status(400).send({ status: "Error", message: "No se pudo, error de red", code: 400 });
-                        }
-                    });
-                } else {
-                    res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
-                }
+                bcrypt.compare(_password, passwordEncriptado).then(verf => {
+                    if (verf) {
+                        mysql.getConnection(sql, [_emailTrabajadores, passwordEncriptado], (error, data) => {
+                            if (!error) {
+                                const tkn = token.signToken(data[0][0].idTrabajadores);
+                                res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
+                            } else {
+                                res.status(400).send({ status: "Error", message: "No se pudo, error de red", code: 400 });
+                            }
+                        });
+                    } else {
+                        res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
+                    }
+                })
             } else {
                 res.status(400).send({ status: "Error", message: "Email no existente", code: 400 });
             }
@@ -152,7 +152,7 @@ trabajadorController.perfil_privado_trabajador = (req, res) => {
 };
 
 
-trabajadorController.editar_foto_perfil_trabajador = async (req, res) => {
+trabajadorController.editar_foto_perfil_trabajador = (req, res) => {
     //const { _idPersona, _foto } = req.body;
     const { _idPersona } = req.body;
     const _foto = req.file.path;
@@ -217,4 +217,4 @@ trabajadorController.listar_contratos_con_solicitantes = (req, res) => {
     );
 };
 
-export default trabajadorController;
+module.exports = trabajadorController;
