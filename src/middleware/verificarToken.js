@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import jwt from 'jsonwebtoken';
 
 const verificarToken = (req, res, next) => {
@@ -8,7 +6,7 @@ const verificarToken = (req, res, next) => {
     try {
         if (!token)  return res.status(401).send({ status: 'Error', message: 'Token no existente', code: 401 })
            
-        const payload = jwt.verify(token, process.env.TOKEN_SECRET);
+        const payload = jwt.verify(token, 'a$QYgmeE$qV');
         req.payload = payload;
         next();
 

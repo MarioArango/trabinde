@@ -7,11 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _dotenv = _interopRequireDefault(require("dotenv"));
-
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
-
-_dotenv["default"].config();
 
 var verificarToken = function verificarToken(req, res, next) {
   var token = req.header('auth-token');
@@ -23,7 +19,7 @@ var verificarToken = function verificarToken(req, res, next) {
       code: 401
     });
 
-    var payload = _jsonwebtoken["default"].verify(token, process.env.TOKEN_SECRET);
+    var payload = _jsonwebtoken["default"].verify(token, 'a$QYgmeE$qV');
 
     req.payload = payload;
     next();

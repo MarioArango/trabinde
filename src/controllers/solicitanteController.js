@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import mysql from '../database';
 import token from '../util/crearToken';
 import encriptacion from '../util/encriptacion';
@@ -7,9 +5,9 @@ import cloudinary from 'cloudinary';
 import bcrypt from 'bcryptjs';
 
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET
+    cloud_name: 'drne6kexd',
+    api_key: '889385581853261',
+    api_secret: '_3Q8ijH8FhIfvf39YGnzAroj7Cs'
 })
 
 import fs from 'fs-extra';
@@ -148,9 +146,6 @@ solicitanteController.denunciar_trabajador = (req, res) => {
     const { _idSolicitudes, _descripcionDenuncia} = req.body;
     const _urlPruebas = req.file.path;
     const sql = "call SP_POST_Denunciar(?,?,?)";
-
-    console.log(process.env.API_KEY);
-    
 
     cloudinary.v2.uploader.upload(_urlPruebas).then(result => {
 

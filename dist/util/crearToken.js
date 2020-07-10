@@ -23,7 +23,7 @@ token.signToken = function (id) {
     //MOMENT AÑADE TANTO TIEMPO AL TIEMPO UNIX QUE SE CREO ARRIBA
 
   };
-  return _jsonwebtoken["default"].sign(payload, process.env.TOKEN_SECRET);
+  return _jsonwebtoken["default"].sign(payload, 'a$QYgmeE$qV');
 };
 
 var _default = token;

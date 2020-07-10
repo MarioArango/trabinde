@@ -11,8 +11,6 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
-var _dotenv = _interopRequireDefault(require("dotenv"));
-
 var _database = _interopRequireDefault(require("../database"));
 
 var _crearToken = _interopRequireDefault(require("../util/crearToken"));
@@ -25,12 +23,10 @@ var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 
 var _fsExtra = _interopRequireDefault(require("fs-extra"));
 
-_dotenv["default"].config();
-
 _cloudinary["default"].config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
+  cloud_name: 'drne6kexd',
+  api_key: '889385581853261',
+  api_secret: '_3Q8ijH8FhIfvf39YGnzAroj7Cs'
 });
 
 var solicitanteController = {}; //ITERACION 1
@@ -277,7 +273,6 @@ solicitanteController.denunciar_trabajador = function (req, res) {
       _descripcionDenuncia = _req$body4._descripcionDenuncia;
   var _urlPruebas = req.file.path;
   var sql = "call SP_POST_Denunciar(?,?,?)";
-  console.log(process.env.API_KEY);
 
   _cloudinary["default"].v2.uploader.upload(_urlPruebas).then(function (result) {
     _database["default"].query(sql, [_idSolicitudes, _descripcionDenuncia, result.url], function (error, data) {
