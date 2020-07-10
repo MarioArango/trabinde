@@ -19,7 +19,7 @@ token.signToken = function (id) {
     id: id,
     iat: (0, _moment["default"])().unix(),
     //CUANDO FUE CREADO EL TOKEN
-    exp: (0, _moment["default"])().add(1, 'minute').unix() //CUANDO VA EXPIRAR EL TOKEN
+    exp: (0, _moment["default"])().add(60, 'minute').unix() //CUANDO VA EXPIRAR EL TOKEN
     //MOMENT AÑADE TANTO TIEMPO AL TIEMPO UNIX QUE SE CREO ARRIBA
 
   };
