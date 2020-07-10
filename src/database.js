@@ -5,10 +5,10 @@ const mysql = require('mysql');
 
 const mysqlConnection = mysql.createPool({
     connectionLimit: 10,
-    host: 'us-cdbr-east-02.cleardb.com',
-    user: 'b6eb6851569774',
-    password: '21d8ae96',
-    database: 'heroku_677a3052d794aa4'
+    host: '',
+    user: '',
+    password: '',
+    database: ''
 });
 
 /*mysqlConnection.connect(function (err) {
