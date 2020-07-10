@@ -38,7 +38,14 @@ var storage = _multer["default"].diskStorage({
 }); //MIDDLEWARES
 
 
-app.use((0, _cors["default"])()); //app.use(morgan('dev'));
+app.use((0, _cors["default"])());
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Request-Method');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,PUT,DELETE');
+  res.header('Allow', 'GET,POST,OPTIONS,PUT,DELETE');
+  next();
+}); //app.use(morgan('dev'));
 
 app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
