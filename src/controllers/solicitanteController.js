@@ -21,16 +21,16 @@ solicitanteController.registro_solicitante = (req, res) => {
 
     const sql = 'call SP_POST_RegistroSolicitante(?, ?, ?, ?, ?, ?, ?)';
 
-    mysql.query('SELECT*FROM solicitantes WHERE emailSolicitantes = ?', [_emailSolicitantes], (er, dt) => {
+    mysql.getConnection('SELECT*FROM solicitantes WHERE emailSolicitantes = ?', [_emailSolicitantes], (er, dt) => {
         
         if(dt[0] == undefined){
-            mysql.query('SELECT*FROM persona AS p WHERE p.dni = ?', _dni, (error, data) => {
+            mysql.getConnection('SELECT*FROM persona AS p WHERE p.dni = ?', _dni, (error, data) => {
                 if (data[0] == undefined) {
 
                     encriptacion.password(_password).then(passwordEncriptado => {
                         console.log(passwordEncriptado);
 
-                        mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (error, data) => {
+                        mysql.getConnection(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (error, data) => {
                             if (!error) {
                                 res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
                             } else {
@@ -57,7 +57,7 @@ solicitanteController.login_solicitante = (req, res) => {
 
     const sql2 = 'SELECT s.emailSolicitantes, s.password FROM solicitantes AS s WHERE s.emailSolicitantes = ?';
     
-    mysql.query(sql2, [_emailSolicitantes], async (error, dat) => {
+    mysql.getConnection(sql2, [_emailSolicitantes], async (error, dat) => {
 
         if (!error){
             if(dat.length != 0){
@@ -65,7 +65,7 @@ solicitanteController.login_solicitante = (req, res) => {
                 const verf = await bcrypt.compare(_password, passwordEncriptado);
 
                 if(verf){
-                    mysql.query(sql, [_emailSolicitantes, passwordEncriptado], (error, data) => {
+                    mysql.getConnection(sql, [_emailSolicitantes, passwordEncriptado], (error, data) => {
                             if (!error) {
                                 const tkn = token.signToken(data[0][0].idSolicitantes);
                                 res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
@@ -88,7 +88,7 @@ solicitanteController.login_solicitante = (req, res) => {
 
 solicitanteController.listar_servicios_trabajadores = (req, res) => {
     const sql = 'call SP_GET_ListarServiciosTrabajadores()';
-    mysql.query(sql, (error, data) => {
+    mysql.getConnection(sql, (error, data) => {
         if(!error){
             res.status(200).send({ status: "Success", data: data[0], code: 200 });
         }else{
@@ -101,7 +101,7 @@ solicitanteController.listar_servicios_trabajadores = (req, res) => {
 solicitanteController.buscador_servicios_trabajadores = (req, res) => {
     const sql = "call SP_GET_BuscadorServiciosTrabajadores(?)";
     const { _nombreRubro } = req.body;
-    mysql.query(sql, [_nombreRubro], (error, data) => {
+    mysql.getConnection(sql, [_nombreRubro], (error, data) => {
         if(!error){
             res.status(200).send({ status: "Success", data: data[0], code: 200 })
         }else{
@@ -115,7 +115,7 @@ solicitanteController.buscador_servicios_trabajadores = (req, res) => {
 solicitanteController.calificar_trabajador_individual = (req, res) => {
     const sql = "call SP_POST_CalificarTrabajadorIndividual(?,?,?)";
     const { _idTrabajadores, _idSolicitantes, _calificacionIndividual } = req.body;
-    mysql.query(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], (error, data) => {
+    mysql.getConnection(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], (error, data) => {
         if(!error){
             res.status(200).send({ status: "Success", message: "Calificacion asignada", code: 200 });
         }else {
@@ -128,7 +128,7 @@ solicitanteController.calificar_trabajador_individual = (req, res) => {
 solicitanteController.perfil_solicitante = (req, res) => {
     const { _idSolicitantes } = req.body;
     const sql = "call SP_GET_PerfilSolicitante(?)"
-    mysql.query(sql, [_idSolicitantes], (error, data) => {
+    mysql.getConnection(sql, [_idSolicitantes], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", data: data[0], code: 200 });
         } else {
@@ -149,7 +149,7 @@ solicitanteController.denunciar_trabajador = (req, res) => {
 
     cloudinary.v2.uploader.upload(_urlPruebas).then(result => {
 
-        mysql.query(sql, [_idSolicitudes, _descripcionDenuncia, result.url], (error, data) => {
+        mysql.getConnection(sql, [_idSolicitudes, _descripcionDenuncia, result.url], (error, data) => {
             if (!error) {
                 fs.unlink(_urlPruebas, () => {
                     res.status(200).send({ status: "Success", message: "Denuncia efectuada", code: 200 });
@@ -169,7 +169,7 @@ solicitanteController.listar_contratos_con_trabajadores = (req, res) => {
     const { _idSolicitantes } = req.body;
     const sql = 'call SP_GET_ListarContratosConTrabajadores(?)';
 
-    mysql.query(sql, [_idSolicitantes], (error, data) => {
+    mysql.getConnection(sql, [_idSolicitantes], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", message: data[0], code: 200 });
 

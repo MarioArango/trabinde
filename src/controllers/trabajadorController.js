@@ -23,17 +23,17 @@ trabajadorController.registro_trabajador = (req, res) => {
     
     const sql = 'call SP_POST_RegistroTrabajador(?,?,?,?,?,?,?,?,?)';
 
-    mysql.query('SELECT*FROM trabajadores WHERE emailTrabajadores = ?', [_emailTrabajadores], (er, dt) => {
+    mysql.getConnection('SELECT*FROM trabajadores WHERE emailTrabajadores = ?', [_emailTrabajadores], (er, dt) => {
         if(dt[0] == undefined){
 
-            mysql.query('SELECT*FROM persona AS p WHERE p.dni = ?', [_dni], (error, data) => {
+            mysql.getConnection('SELECT*FROM persona AS p WHERE p.dni = ?', [_dni], (error, data) => {
                 if (data[0] == undefined) {
 
                     encriptacion.password(_password).then(passwordEncriptado => {
 
                         cloudinary.v2.uploader.upload(_foto).then(result => {
 
-                            mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (error, data) => {
+                            mysql.getConnection(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (error, data) => {
                                 if (!error) {
                                     fs.unlink(_foto, () => {
                                         res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
@@ -67,7 +67,7 @@ trabajadorController.login_trabajador = (req, res) => {
 
     const sql2 = 'SELECT t.emailTrabajadores, t.password FROM trabajadores AS t WHERE t.emailTrabajadores = ?';
 
-    mysql.query(sql2, [_emailTrabajadores], async (error, dat) => {
+    mysql.getConnection(sql2, [_emailTrabajadores], async (error, dat) => {
 
         if (!error) {
             if (dat.length != 0) {
@@ -75,7 +75,7 @@ trabajadorController.login_trabajador = (req, res) => {
                 const verf = await bcrypt.compare(_password, passwordEncriptado);
 
                 if (verf) {
-                    mysql.query(sql, [_emailTrabajadores, passwordEncriptado], (error, data) => {
+                    mysql.getConnection(sql, [_emailTrabajadores, passwordEncriptado], (error, data) => {
                         if (!error) {
                             const tkn = token.signToken(data[0][0].idTrabajadores);
                             res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
@@ -103,7 +103,7 @@ trabajadorController.subir_publicacion_galeria = (req, res) => {
     const sql = 'call SP_POST_SubirPublicacionGaleria(?, ?, ?)';
 
     cloudinary.v2.uploader.upload(_urlimagen).then(result => {
-        mysql.query(sql, [_idTrabajadores, result.url, _descripcion], (error, data) => {
+        mysql.getConnection(sql, [_idTrabajadores, result.url, _descripcion], (error, data) => {
             if (!error) {
                 fs.unlink(_urlimagen, () => {
                     res.status(200).send({ status: "Success", message: "Publicación subida", code: 200 });
@@ -123,9 +123,9 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
     const sql1 = 'call SP_GET_PerfilPrivadoTrabajador(?)';
     const sql2 = 'call SP_GET_ListarPublicaciones(?)';
-    mysql.query(sql1, [_idTrabajadores], (error, data) => {
+    mysql.getConnection(sql1, [_idTrabajadores], (error, data) => {
        const perfil = data[0][0];
-        mysql.query(sql2, [_idTrabajadores], (err, dat) => {
+        mysql.getConnection(sql2, [_idTrabajadores], (err, dat) => {
             perfil.publicaciones = dat[0];
             if (!error) {
             res.status(200).send({ status: "Success", data: perfil, code: 200 });
@@ -141,7 +141,7 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
 trabajadorController.perfil_privado_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
     const sql = 'call SP_GET_PerfilPrivadoTrabajador(?)'
-    mysql.query(sql, [_idTrabajadores], (error, data) => {
+    mysql.getConnection(sql, [_idTrabajadores], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", data: data[0], code: 200 });
         } else {
@@ -159,7 +159,7 @@ trabajadorController.editar_foto_perfil_trabajador = async (req, res) => {
     const sql = 'call SP_PUT_EditarFotoPerfilTrabajador(?,?)'
 
     cloudinary.v2.uploader.upload(_foto).then(result=> {
-        mysql.query(sql, [_idPersona, result.url], (error, data) => {
+        mysql.getConnection(sql, [_idPersona, result.url], (error, data) => {
             if (!error) {
                 fs.unlink(_foto, () => {
                     res.status(200).send({ status: "Success", message: "Foto actualizada", code: 200 });
@@ -186,7 +186,7 @@ trabajadorController.denunciar_solicitante = (req, res) => {
     const sql = "call SP_POST_Denunciar(?,?,?)";
 
     cloudinary.v2.uploader.upload(_urlPruebas).then(result => {
-        mysql.query(sql, [_idSolicitudes, _descripcionDenuncia, result.url], (error, data) => {
+        mysql.getConnection(sql, [_idSolicitudes, _descripcionDenuncia, result.url], (error, data) => {
             if (!error) {
                 fs.unlink(_urlPruebas, () => {
                     res.status(200).send({ status: "Success", message: "Denuncia efectuada", code: 200 });
@@ -206,7 +206,7 @@ trabajadorController.listar_contratos_con_solicitantes = (req, res) => {
     const { _idTrabajadores } = req.body;
     const sql = 'call SP_GET_ListarContratosConSolicitantes(?)';
 
-    mysql.query(sql, [_idTrabajadores], (error, data) => {
+    mysql.getConnection(sql, [_idTrabajadores], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", message: data[0], code: 200 });
             

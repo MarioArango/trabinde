@@ -8,7 +8,7 @@ administradorController.login_administrador = (req, res) => {
     const { _dni, _password } = req.body;
     const sql = 'call SP_GET_LoginAdministrador(?,?)';
 
-    mysql.query(sql, [_dni, _password], (error, data) => {
+    mysql.getConnection(sql, [_dni, _password], (error, data) => {
 
         if (!error) {
             const tkn = token.signToken(data[0][0].idAdministradores);
@@ -22,7 +22,7 @@ administradorController.login_administrador = (req, res) => {
 
 administradorController.listar_trabajadores = (req, res) => {
     const sql = 'call SP_GET_AdministradorListarTrabajadores()';
-    mysql.query(sql, (error, data) => {
+    mysql.getConnection(sql, (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", message: data[0], code: 200 });
         } else {
@@ -33,7 +33,7 @@ administradorController.listar_trabajadores = (req, res) => {
 
 administradorController.listar_solicitantes = (req, res) => {
     const sql = 'call SP_GET_AdministradorListarSolicitantes()';
-    mysql.query(sql, (error, data) => {
+    mysql.getConnection(sql, (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", message: data[0], code: 200 });
         } else {
@@ -48,11 +48,11 @@ administradorController.deshabilitar_habilitar_solicitante= (req, res) => {
     const sql = 'call SP_PUT_AdministradorDeshabilitarHabilitarSolicitante(?)';
     const sql1 = 'SELECT s.estadoUsuario FROM solicitantes AS s JOIN persona AS p ON s.idPersona = p.idPersona WHERE p.dni = ?'
 
-    mysql.query(sql1, [_dni], (error, data) => {
+    mysql.getConnection(sql1, [_dni], (error, data) => {
         
         const estadoUsuario = data[0].estadoUsuario;
 
-        mysql.query(sql, [_dni], (err, dat) => {
+        mysql.getConnection(sql, [_dni], (err, dat) => {
             if (!error) {
                 if (estadoUsuario==1){
                     res.status(200).send({ status: "Success", message: "Solicitante deshabilitado", code: 200 });
@@ -71,11 +71,11 @@ administradorController.deshabilitar_habilitar_trabajador = (req, res) => {
     const sql = 'call SP_PUT_AdministradorDeshabilitarHabilitarTrabajador(?)';
     const sql1 = 'SELECT t.estadoUsuario FROM trabajadores AS t JOIN persona AS p ON t.idPersona = p.idPersona WHERE p.dni = ?'
 
-    mysql.query(sql1, [_dni], (error, data) => {
+    mysql.getConnection(sql1, [_dni], (error, data) => {
 
         const estadoUsuario = data[0].estadoUsuario;
 
-        mysql.query(sql, [_dni], (err, dat) => {
+        mysql.getConnection(sql, [_dni], (err, dat) => {
             if (!error) {
                 if (estadoUsuario == 1) {
                     res.status(200).send({ status: "Success", message: "Trabajador deshabilitado", code: 200 });
@@ -98,7 +98,7 @@ administradorController.deshabilitar_habilitar_trabajador = (req, res) => {
 administradorController.numero_denuncias_solicitante = (req, res) => {
     const { _idSolicitantes } = req.body;
     const sql = 'call SP_GET_AdministradorNumeroDeDenunciasDelSolicitantes(?)';
-    mysql.query(sql, [_idSolicitantes], (error, data) => {
+    mysql.getConnection(sql, [_idSolicitantes], (error, data) => {
         
         if (!error) {
                 res.status(200).send({ status: "Success", data: data[0][0], code: 200 });
@@ -111,7 +111,7 @@ administradorController.numero_denuncias_solicitante = (req, res) => {
 administradorController.numero_denuncias_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
     const sql = 'call SP_GET_AdministradorNumeroDeDenunciasDelTrabajador(?)';
-    mysql.query(sql, [_idTrabajadores], (error, data) => {
+    mysql.getConnection(sql, [_idTrabajadores], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", data: data[0][0], code: 200 });
         } else {
@@ -124,7 +124,7 @@ administradorController.listar_denuncias_a_solicitantes = (req, res) => {
     const { _idSolicitantes } = req.body;
     const sql = 'call SP_GET_ListarDenunciasASolicitantes(?)';
 
-    mysql.query(sql, [_idSolicitantes], (error, data) => {
+    mysql.getConnection(sql, [_idSolicitantes], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", data: data[0], code: 200 });
         } else {
@@ -136,7 +136,7 @@ administradorController.listar_denuncias_a_solicitantes = (req, res) => {
 administradorController.listar_denuncias_a_trabajadores = (req, res) => {
     const { _idTrabajadores } = req.body;
     const sql = 'call SP_GET_ListarDenunciasATrabajadores(?)';
-    mysql.query(sql, [_idTrabajadores], (error, data) => {
+    mysql.getConnection(sql, [_idTrabajadores], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", data: data[0], code: 200 });
         } else {

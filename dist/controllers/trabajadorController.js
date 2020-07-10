@@ -44,13 +44,13 @@ trabajadorController.registro_trabajador = function (req, res) {
   var _foto = req.file.path;
   var sql = 'call SP_POST_RegistroTrabajador(?,?,?,?,?,?,?,?,?)';
 
-  _database["default"].query('SELECT*FROM trabajadores WHERE emailTrabajadores = ?', [_emailTrabajadores], function (er, dt) {
+  _database["default"].getConnection('SELECT*FROM trabajadores WHERE emailTrabajadores = ?', [_emailTrabajadores], function (er, dt) {
     if (dt[0] == undefined) {
-      _database["default"].query('SELECT*FROM persona AS p WHERE p.dni = ?', [_dni], function (error, data) {
+      _database["default"].getConnection('SELECT*FROM persona AS p WHERE p.dni = ?', [_dni], function (error, data) {
         if (data[0] == undefined) {
           _encriptacion["default"].password(_password).then(function (passwordEncriptado) {
             _cloudinary["default"].v2.uploader.upload(_foto).then(function (result) {
-              _database["default"].query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], function (error, data) {
+              _database["default"].getConnection(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], function (error, data) {
                 if (!error) {
                   _fsExtra["default"].unlink(_foto, function () {
                     res.status(200).send({
@@ -98,7 +98,7 @@ trabajadorController.login_trabajador = function (req, res) {
   var sql = 'call SP_GET_LoginTrabajador(?, ?)';
   var sql2 = 'SELECT t.emailTrabajadores, t.password FROM trabajadores AS t WHERE t.emailTrabajadores = ?';
 
-  _database["default"].query(sql2, [_emailTrabajadores], /*#__PURE__*/function () {
+  _database["default"].getConnection(sql2, [_emailTrabajadores], /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(error, dat) {
       var passwordEncriptado, verf;
       return _regenerator["default"].wrap(function _callee$(_context) {
@@ -123,7 +123,7 @@ trabajadorController.login_trabajador = function (req, res) {
               verf = _context.sent;
 
               if (verf) {
-                _database["default"].query(sql, [_emailTrabajadores, passwordEncriptado], function (error, data) {
+                _database["default"].getConnection(sql, [_emailTrabajadores, passwordEncriptado], function (error, data) {
                   if (!error) {
                     var tkn = _crearToken["default"].signToken(data[0][0].idTrabajadores);
 
@@ -193,7 +193,7 @@ trabajadorController.subir_publicacion_galeria = function (req, res) {
   var sql = 'call SP_POST_SubirPublicacionGaleria(?, ?, ?)';
 
   _cloudinary["default"].v2.uploader.upload(_urlimagen).then(function (result) {
-    _database["default"].query(sql, [_idTrabajadores, result.url, _descripcion], function (error, data) {
+    _database["default"].getConnection(sql, [_idTrabajadores, result.url, _descripcion], function (error, data) {
       if (!error) {
         _fsExtra["default"].unlink(_urlimagen, function () {
           res.status(200).send({
@@ -220,10 +220,10 @@ trabajadorController.perfil_publico_trabajador = function (req, res) {
   var sql1 = 'call SP_GET_PerfilPrivadoTrabajador(?)';
   var sql2 = 'call SP_GET_ListarPublicaciones(?)';
 
-  _database["default"].query(sql1, [_idTrabajadores], function (error, data) {
+  _database["default"].getConnection(sql1, [_idTrabajadores], function (error, data) {
     var perfil = data[0][0];
 
-    _database["default"].query(sql2, [_idTrabajadores], function (err, dat) {
+    _database["default"].getConnection(sql2, [_idTrabajadores], function (err, dat) {
       perfil.publicaciones = dat[0];
 
       if (!error) {
@@ -247,7 +247,7 @@ trabajadorController.perfil_privado_trabajador = function (req, res) {
   var _idTrabajadores = req.body._idTrabajadores;
   var sql = 'call SP_GET_PerfilPrivadoTrabajador(?)';
 
-  _database["default"].query(sql, [_idTrabajadores], function (error, data) {
+  _database["default"].getConnection(sql, [_idTrabajadores], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -278,7 +278,7 @@ trabajadorController.editar_foto_perfil_trabajador = /*#__PURE__*/function () {
             sql = 'call SP_PUT_EditarFotoPerfilTrabajador(?,?)';
 
             _cloudinary["default"].v2.uploader.upload(_foto).then(function (result) {
-              _database["default"].query(sql, [_idPersona, result.url], function (error, data) {
+              _database["default"].getConnection(sql, [_idPersona, result.url], function (error, data) {
                 if (!error) {
                   _fsExtra["default"].unlink(_foto, function () {
                     res.status(200).send({
@@ -326,7 +326,7 @@ trabajadorController.denunciar_solicitante = function (req, res) {
   var sql = "call SP_POST_Denunciar(?,?,?)";
 
   _cloudinary["default"].v2.uploader.upload(_urlPruebas).then(function (result) {
-    _database["default"].query(sql, [_idSolicitudes, _descripcionDenuncia, result.url], function (error, data) {
+    _database["default"].getConnection(sql, [_idSolicitudes, _descripcionDenuncia, result.url], function (error, data) {
       if (!error) {
         _fsExtra["default"].unlink(_urlPruebas, function () {
           res.status(200).send({
@@ -352,7 +352,7 @@ trabajadorController.listar_contratos_con_solicitantes = function (req, res) {
   var _idTrabajadores = req.body._idTrabajadores;
   var sql = 'call SP_GET_ListarContratosConSolicitantes(?)';
 
-  _database["default"].query(sql, [_idTrabajadores], function (error, data) {
+  _database["default"].getConnection(sql, [_idTrabajadores], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",

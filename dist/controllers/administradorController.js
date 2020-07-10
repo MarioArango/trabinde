@@ -19,7 +19,7 @@ administradorController.login_administrador = function (req, res) {
       _password = _req$body._password;
   var sql = 'call SP_GET_LoginAdministrador(?,?)';
 
-  _database["default"].query(sql, [_dni, _password], function (error, data) {
+  _database["default"].getConnection(sql, [_dni, _password], function (error, data) {
     if (!error) {
       var tkn = _crearToken["default"].signToken(data[0][0].idAdministradores);
 
@@ -41,7 +41,7 @@ administradorController.login_administrador = function (req, res) {
 administradorController.listar_trabajadores = function (req, res) {
   var sql = 'call SP_GET_AdministradorListarTrabajadores()';
 
-  _database["default"].query(sql, function (error, data) {
+  _database["default"].getConnection(sql, function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -61,7 +61,7 @@ administradorController.listar_trabajadores = function (req, res) {
 administradorController.listar_solicitantes = function (req, res) {
   var sql = 'call SP_GET_AdministradorListarSolicitantes()';
 
-  _database["default"].query(sql, function (error, data) {
+  _database["default"].getConnection(sql, function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -83,10 +83,10 @@ administradorController.deshabilitar_habilitar_solicitante = function (req, res)
   var sql = 'call SP_PUT_AdministradorDeshabilitarHabilitarSolicitante(?)';
   var sql1 = 'SELECT s.estadoUsuario FROM solicitantes AS s JOIN persona AS p ON s.idPersona = p.idPersona WHERE p.dni = ?';
 
-  _database["default"].query(sql1, [_dni], function (error, data) {
+  _database["default"].getConnection(sql1, [_dni], function (error, data) {
     var estadoUsuario = data[0].estadoUsuario;
 
-    _database["default"].query(sql, [_dni], function (err, dat) {
+    _database["default"].getConnection(sql, [_dni], function (err, dat) {
       if (!error) {
         if (estadoUsuario == 1) {
           res.status(200).send({
@@ -117,10 +117,10 @@ administradorController.deshabilitar_habilitar_trabajador = function (req, res) 
   var sql = 'call SP_PUT_AdministradorDeshabilitarHabilitarTrabajador(?)';
   var sql1 = 'SELECT t.estadoUsuario FROM trabajadores AS t JOIN persona AS p ON t.idPersona = p.idPersona WHERE p.dni = ?';
 
-  _database["default"].query(sql1, [_dni], function (error, data) {
+  _database["default"].getConnection(sql1, [_dni], function (error, data) {
     var estadoUsuario = data[0].estadoUsuario;
 
-    _database["default"].query(sql, [_dni], function (err, dat) {
+    _database["default"].getConnection(sql, [_dni], function (err, dat) {
       if (!error) {
         if (estadoUsuario == 1) {
           res.status(200).send({
@@ -152,7 +152,7 @@ administradorController.numero_denuncias_solicitante = function (req, res) {
   var _idSolicitantes = req.body._idSolicitantes;
   var sql = 'call SP_GET_AdministradorNumeroDeDenunciasDelSolicitantes(?)';
 
-  _database["default"].query(sql, [_idSolicitantes], function (error, data) {
+  _database["default"].getConnection(sql, [_idSolicitantes], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -173,7 +173,7 @@ administradorController.numero_denuncias_trabajador = function (req, res) {
   var _idTrabajadores = req.body._idTrabajadores;
   var sql = 'call SP_GET_AdministradorNumeroDeDenunciasDelTrabajador(?)';
 
-  _database["default"].query(sql, [_idTrabajadores], function (error, data) {
+  _database["default"].getConnection(sql, [_idTrabajadores], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -194,7 +194,7 @@ administradorController.listar_denuncias_a_solicitantes = function (req, res) {
   var _idSolicitantes = req.body._idSolicitantes;
   var sql = 'call SP_GET_ListarDenunciasASolicitantes(?)';
 
-  _database["default"].query(sql, [_idSolicitantes], function (error, data) {
+  _database["default"].getConnection(sql, [_idSolicitantes], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -215,7 +215,7 @@ administradorController.listar_denuncias_a_trabajadores = function (req, res) {
   var _idTrabajadores = req.body._idTrabajadores;
   var sql = 'call SP_GET_ListarDenunciasATrabajadores(?)';
 
-  _database["default"].query(sql, [_idTrabajadores], function (error, data) {
+  _database["default"].getConnection(sql, [_idTrabajadores], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",

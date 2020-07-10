@@ -42,14 +42,14 @@ solicitanteController.registro_solicitante = function (req, res) {
       _password = _req$body._password;
   var sql = 'call SP_POST_RegistroSolicitante(?, ?, ?, ?, ?, ?, ?)';
 
-  _database["default"].query('SELECT*FROM solicitantes WHERE emailSolicitantes = ?', [_emailSolicitantes], function (er, dt) {
+  _database["default"].getConnection('SELECT*FROM solicitantes WHERE emailSolicitantes = ?', [_emailSolicitantes], function (er, dt) {
     if (dt[0] == undefined) {
-      _database["default"].query('SELECT*FROM persona AS p WHERE p.dni = ?', _dni, function (error, data) {
+      _database["default"].getConnection('SELECT*FROM persona AS p WHERE p.dni = ?', _dni, function (error, data) {
         if (data[0] == undefined) {
           _encriptacion["default"].password(_password).then(function (passwordEncriptado) {
             console.log(passwordEncriptado);
 
-            _database["default"].query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], function (error, data) {
+            _database["default"].getConnection(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], function (error, data) {
               if (!error) {
                 res.status(200).send({
                   status: "Success",
@@ -92,7 +92,7 @@ solicitanteController.login_solicitante = function (req, res) {
   var sql = 'call SP_GET_LoginSolicitante(?, ?)';
   var sql2 = 'SELECT s.emailSolicitantes, s.password FROM solicitantes AS s WHERE s.emailSolicitantes = ?';
 
-  _database["default"].query(sql2, [_emailSolicitantes], /*#__PURE__*/function () {
+  _database["default"].getConnection(sql2, [_emailSolicitantes], /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(error, dat) {
       var passwordEncriptado, verf;
       return _regenerator["default"].wrap(function _callee$(_context) {
@@ -117,7 +117,7 @@ solicitanteController.login_solicitante = function (req, res) {
               verf = _context.sent;
 
               if (verf) {
-                _database["default"].query(sql, [_emailSolicitantes, passwordEncriptado], function (error, data) {
+                _database["default"].getConnection(sql, [_emailSolicitantes, passwordEncriptado], function (error, data) {
                   if (!error) {
                     var tkn = _crearToken["default"].signToken(data[0][0].idSolicitantes);
 
@@ -180,7 +180,7 @@ solicitanteController.login_solicitante = function (req, res) {
 solicitanteController.listar_servicios_trabajadores = function (req, res) {
   var sql = 'call SP_GET_ListarServiciosTrabajadores()';
 
-  _database["default"].query(sql, function (error, data) {
+  _database["default"].getConnection(sql, function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -201,7 +201,7 @@ solicitanteController.buscador_servicios_trabajadores = function (req, res) {
   var sql = "call SP_GET_BuscadorServiciosTrabajadores(?)";
   var _nombreRubro = req.body._nombreRubro;
 
-  _database["default"].query(sql, [_nombreRubro], function (error, data) {
+  _database["default"].getConnection(sql, [_nombreRubro], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -226,7 +226,7 @@ solicitanteController.calificar_trabajador_individual = function (req, res) {
       _idSolicitantes = _req$body3._idSolicitantes,
       _calificacionIndividual = _req$body3._calificacionIndividual;
 
-  _database["default"].query(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], function (error, data) {
+  _database["default"].getConnection(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -247,7 +247,7 @@ solicitanteController.perfil_solicitante = function (req, res) {
   var _idSolicitantes = req.body._idSolicitantes;
   var sql = "call SP_GET_PerfilSolicitante(?)";
 
-  _database["default"].query(sql, [_idSolicitantes], function (error, data) {
+  _database["default"].getConnection(sql, [_idSolicitantes], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
@@ -275,7 +275,7 @@ solicitanteController.denunciar_trabajador = function (req, res) {
   var sql = "call SP_POST_Denunciar(?,?,?)";
 
   _cloudinary["default"].v2.uploader.upload(_urlPruebas).then(function (result) {
-    _database["default"].query(sql, [_idSolicitudes, _descripcionDenuncia, result.url], function (error, data) {
+    _database["default"].getConnection(sql, [_idSolicitudes, _descripcionDenuncia, result.url], function (error, data) {
       if (!error) {
         _fsExtra["default"].unlink(_urlPruebas, function () {
           res.status(200).send({
@@ -301,7 +301,7 @@ solicitanteController.listar_contratos_con_trabajadores = function (req, res) {
   var _idSolicitantes = req.body._idSolicitantes;
   var sql = 'call SP_GET_ListarContratosConTrabajadores(?)';
 
-  _database["default"].query(sql, [_idSolicitantes], function (error, data) {
+  _database["default"].getConnection(sql, [_idSolicitantes], function (error, data) {
     if (!error) {
       res.status(200).send({
         status: "Success",
