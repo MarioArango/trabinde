@@ -3,7 +3,7 @@
 const mysql = require('mysql');
 //import util from 'util';
 
-const mysqlConnection = mysql.mysqlConnection({
+const mysqlConnection = mysql.createConnection({
     connectionLimit: 10,
     host: 'us-cdbr-east-02.cleardb.com',
     user: 'b9d3e2959e62be',
