@@ -15,12 +15,12 @@ _dotenv["default"].config();
 
 //import util from 'util';
 var mysqlConnection = _mysql["default"].createConnection({
-  host: process.env.HOST_DB,
-  port: process.env.PORT_DB,
-  user: process.env.USER_DB,
-  password: process.env.PASSWORD_DB,
-  database: process.env.DATABASE,
-  dialect: process.env.DB_DIALECT
+  host: 'us-cdbr-east-02.cleardb.com',
+  port: 3306,
+  user: 'b6eb6851569774',
+  password: '21d8ae96',
+  database: 'heroku_677a3052d794aa4',
+  dialect: 'mysql'
 });
 
 mysqlConnection.connect(function (err) {
