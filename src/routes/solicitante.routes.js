@@ -15,7 +15,7 @@ router.get('/buscador-servicios-trabajadores', verificarToken, solicitanteContro
 
 
 //ITERACION 2
-router.post('/calificar-trabajador-individual', verificarToken, solicitanteController.calificar_trabajador_individual);
+router.put('/calificar-trabajador-individual', verificarToken, solicitanteController.calificar_trabajador_individual);
 
 router.get('/perfil-solicitante', verificarToken, solicitanteController.perfil_solicitante);
 

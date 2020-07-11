@@ -123,7 +123,7 @@ solicitanteController.buscador_servicios_trabajadores = (req, res) => {
 solicitanteController.calificar_trabajador_individual = (req, res) => {
     
     const { _idTrabajadores, _idSolicitantes, _calificacionIndividual } = req.body;
-    const sql = "call SP_POST_CalificarTrabajadorIndividual(?,?,?)";
+    const sql = "call SP_PUT_CalificarTrabajadorIndividual(?,?,?)";
     mysql.query(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], (error, data) => {
         if(!error){
             res.status(200).send({ status: "Success", message: "Calificacion asignada", code: 200 });
