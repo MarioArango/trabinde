@@ -48,7 +48,7 @@ solicitanteController.registro_solicitante = (req, res) => {
                 }
             })
             }else{
-            res.status(400).send({ status: "Error", message: "Email en uso", code: 400 });
+                res.status(400).send({ status: "Error", message: "Email en uso", code: 400 });
             } 
         }else{
             res.status(400).send({ status: "Error", message: "Error de red", code: 400 });
