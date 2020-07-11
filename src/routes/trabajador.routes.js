@@ -18,7 +18,7 @@ router.get('/perfil-privado-trabajador', verificarToken, trabajadorController.pe
 router.put('/editar-foto-perfil-trabajador', verificarToken, trabajadorController.editar_foto_perfil_trabajador);
 
 //ITERACION 4
-router.post('/denunciar-solicitante', verificarToken, trabajadorController.denunciar_solicitante);
+router.put('/denunciar-solicitante', verificarToken, trabajadorController.denunciar_solicitante);
 router.get('/listar-contratos-con-solicitantes', verificarToken, trabajadorController.listar_contratos_con_solicitantes);
 
 module.exports = router;
