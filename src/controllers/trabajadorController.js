@@ -124,15 +124,19 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
     const sql1 = 'call SP_GET_PerfilPrivadoTrabajador(?)';
     const sql2 = 'call SP_GET_ListarPublicaciones(?)';
     mysql.query(sql1, [_idTrabajadores], (error, data) => {
-       const perfil = data[0][0];
-        mysql.query(sql2, [_idTrabajadores], (err, dat) => {
-            perfil.publicaciones = dat[0];
-            if (!error) {
-            res.status(200).send({ status: "Success", data: perfil, code: 200 });
-            } else {
-            res.status(400).send({ status: "Error", message: "Trabajador no encontrado", code: 400 });
-            }   
-        })
+        if(!error){
+            const perfil = data[0][0];
+            mysql.query(sql2, [_idTrabajadores], (err, dat) => {
+                perfil.publicaciones = dat[0];
+                if (!err) {
+                    res.status(200).send({ status: "Success", data: perfil, code: 200 });
+                } else {
+                    res.status(400).send({ status: "Error", message: "Trabajador no encontrado", code: 400 });
+                }   
+            })
+        }else {
+            res.status(400).send({ status: "Error", message: "Perfil no encontrado", code: 400 });
+        }
     }
     );
 };
