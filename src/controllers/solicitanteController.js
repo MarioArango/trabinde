@@ -29,7 +29,7 @@ solicitanteController.registro_solicitante = (req, res) => {
                     if (data[0] == undefined) {
 
                         bcrypt.genSalt(10, (err, salt) => {
-                            bcrypt.hash(password, salt, (err, passwordEncriptado) => {
+                            bcrypt.hash(_password, salt, (err, passwordEncriptado) => {
 
                                 mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (e, data) => {
                                     if (!e) {

@@ -32,7 +32,7 @@ trabajadorController.registro_trabajador = (req, res) => {
                         if (data[0] == undefined) {
 
                             bcrypt.genSalt(10, (err, salt) => {
-                                bcrypt.hash(password, salt, (err, passwordEncriptado) => {
+                                bcrypt.hash(_password, salt, (err, passwordEncriptado) => {
                                     cloudinary.v2.uploader.upload(_foto).then(result => {
 
                                         mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (err, data) => {
