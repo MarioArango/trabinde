@@ -175,7 +175,7 @@ solicitanteController.denunciar_trabajador = (req, res) => {
 
 solicitanteController.listar_contratos_con_trabajadores = (req, res) => {
     const { _idSolicitantes } = req.body;
-    const sql = 'call SP_GET_ListarContratosConTrabajadores(?)';
+    const sql = "call SP_GET_ListarContratosConTrabajadores(?)";
 
     mysql.query(sql, [_idSolicitantes], (error, data) => {
         if (!error) {
