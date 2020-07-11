@@ -36,8 +36,8 @@ trabajadorController.registro_trabajador = (req, res) => {
 
                                 cloudinary.v2.uploader.upload(_foto).then(result => {
 
-                                    mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (error, data) => {
-                                        if (!error) {
+                                    mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (err, data) => {
+                                        if (!err) {
                                             fs.unlink(_foto, () => {
                                                 res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
                                             });
@@ -46,11 +46,11 @@ trabajadorController.registro_trabajador = (req, res) => {
                                         }
                                     });
                                 }).catch(error => {
-                                    console.log('No se obtuvo respuesta de cloudinary: ', error);
+                                    res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
                                 })
 
                             }).catch(error => {
-                                console.log('Error de red');
+                                res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
                             })
                         } else {
                             res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
@@ -83,8 +83,8 @@ trabajadorController.login_trabajador = (req, res) => {
                 const passwordEncriptado = dat[0].password;
                 bcrypt.compare(_password, passwordEncriptado).then(verf => {
                     if (verf) {
-                        mysql.query(sql, [_emailTrabajadores, passwordEncriptado], (error, data) => {
-                            if (!error) {
+                        mysql.query(sql, [_emailTrabajadores, passwordEncriptado], (err, data) => {
+                            if (!err) {
                                 const tkn = token.signToken(data[0][0].idTrabajadores);
                                 res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
                             } else {

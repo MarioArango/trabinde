@@ -30,15 +30,15 @@ solicitanteController.registro_solicitante = (req, res) => {
                     if (data[0] == undefined) {
                         encriptacion.password(_password).then(passwordEncriptado => {
 
-                            mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (error, data) => {
-                                if (!error) {
+                            mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (e, data) => {
+                                if (!e) {
                                     res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
                                 } else {
                                     res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
                                 }
                             });
-                        }).catch(error => {
-                            console.log('No se pudo registrar');
+                        }).catch(er => {
+                            res.status(400).send({ status: "Error", message: "Error de red", code: 400 });
                         })
                     } else {
                         res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
@@ -70,8 +70,8 @@ solicitanteController.login_solicitante = (req, res) => {
                 const passwordEncriptado = dat[0].password;
                 bcrypt.compare(_password, passwordEncriptado).then(verf => {
                     if(verf){
-                        mysql.query(sql, [_emailSolicitantes, passwordEncriptado], (error, data) => {
-                            if (!error) {
+                        mysql.query(sql, [_emailSolicitantes, passwordEncriptado], (err, data) => {
+                            if (!err) {
                                 const tkn = token.signToken(data[0][0].idSolicitantes);
                                 res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
                             }else{
