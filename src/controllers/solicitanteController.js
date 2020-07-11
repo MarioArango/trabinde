@@ -165,8 +165,8 @@ solicitanteController.denunciar_trabajador = (req, res) => {
             }
         }
         );
-    }).catch(error => {
-        console.log('No se obtuvo respuesta de cloudinary: ', error);
+    }).catch(err => {
+        res.status(400).send({ status: "Error", message: "Denuncia no enviada, error del servidor", code: 400 });
     })
 };
 
