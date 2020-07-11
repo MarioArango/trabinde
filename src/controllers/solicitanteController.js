@@ -154,7 +154,7 @@ solicitanteController.denunciar_trabajador = (req, res) => {
     //const { _idSolicitudes, _descripcionDenuncia, _urlPruebas} = req.body;
     const { _idSolicitudes, _descripcionDenuncia} = req.body;
     const _urlPruebas = req.file.path;
-    const sql = "call SP_POST_Denunciar(?,?,?)";
+    const sql = "call SP_PUT_Denunciar(?,?,?)";
 
     cloudinary.v2.uploader.upload(_urlPruebas).then(result => {
 

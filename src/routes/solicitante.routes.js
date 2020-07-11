@@ -20,7 +20,7 @@ router.put('/calificar-trabajador-individual', verificarToken, solicitanteContro
 router.get('/perfil-solicitante', verificarToken, solicitanteController.perfil_solicitante);
 
 //ITERACION 4
-router.post('/denunciar-trabajador', verificarToken, solicitanteController.denunciar_trabajador);
+router.put('/denunciar-trabajador', verificarToken, solicitanteController.denunciar_trabajador);
 router.get('/listar-contratos-con-trabajadores', verificarToken, solicitanteController.listar_contratos_con_trabajadores);
 
 module.exports = router;
