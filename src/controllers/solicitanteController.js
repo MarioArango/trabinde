@@ -22,8 +22,9 @@ solicitanteController.registro_solicitante = (req, res) => {
     const sql = 'call SP_POST_RegistroSolicitante(?, ?, ?, ?, ?, ?, ?)';
 
     mysql.query('SELECT*FROM solicitantes WHERE emailSolicitantes = ?', [_emailSolicitantes], (er, dt) => {
-        
-        if(dt[0] == undefined){
+
+        if(!er){
+           if(dt[0] == undefined){
             mysql.query('SELECT*FROM persona AS p WHERE p.dni = ?', _dni, (error, data) => {
                 if (data[0] == undefined) {
 
@@ -46,7 +47,12 @@ solicitanteController.registro_solicitante = (req, res) => {
             })
         }else{
             res.status(400).send({ status: "Error", message: "Email en uso", code: 400 });
+        } 
+        }else{
+            res.status(400).send({ status: "Error", message: "Error de red", code: 400 });
         }
+        
+        
     })
 };
 
