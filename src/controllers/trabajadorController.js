@@ -1,6 +1,5 @@
 const mysql = require('../database');
 const token = require('../util/crearToken');
-const encriptacion = require('../util/encriptacion');
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcryptjs');
 
@@ -32,26 +31,25 @@ trabajadorController.registro_trabajador = (req, res) => {
                     if(!error){
                         if (data[0] == undefined) {
 
-                            encriptacion.password(_password).then(passwordEncriptado => {
+                            bcrypt.genSalt(10, (err, salt) => {
+                                bcrypt.hash(password, salt, (err, passwordEncriptado) => {
+                                    cloudinary.v2.uploader.upload(_foto).then(result => {
 
-                                cloudinary.v2.uploader.upload(_foto).then(result => {
-
-                                    mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (err, data) => {
-                                        if (!err) {
-                                            fs.unlink(_foto, () => {
-                                                res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
-                                            });
-                                        } else {
-                                            res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
-                                        }
-                                    });
-                                }).catch(error => {
-                                    res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
+                                        mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (err, data) => {
+                                            if (!err) {
+                                                fs.unlink(_foto, () => {
+                                                    res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
+                                                });
+                                            } else {
+                                                res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
+                                            }
+                                        });
+                                    }).catch(error => {
+                                        res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
+                                    })      
                                 })
-
-                            }).catch(error => {
-                                res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
                             })
+                            
                         } else {
                             res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
                         }
