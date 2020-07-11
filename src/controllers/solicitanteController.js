@@ -22,32 +22,35 @@ solicitanteController.registro_solicitante = (req, res) => {
     const sql = 'call SP_POST_RegistroSolicitante(?, ?, ?, ?, ?, ?, ?)';
 
     mysql.query('SELECT*FROM solicitantes WHERE emailSolicitantes = ?', [_emailSolicitantes], (er, dt) => {
-
         if(!er){
            if(dt[0] == undefined){
             mysql.query('SELECT*FROM persona AS p WHERE p.dni = ?', _dni, (error, data) => {
-                if (data[0] == undefined) {
+                
+                if(!error){
+                    if (data[0] == undefined) {
+                        encriptacion.password(_password).then(passwordEncriptado => {
+                            console.log(passwordEncriptado);
 
-                    encriptacion.password(_password).then(passwordEncriptado => {
-                        console.log(passwordEncriptado);
-
-                        mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (error, data) => {
-                            if (!error) {
-                                res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
-                            } else {
-                                res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
-                            }
-                        });
-                    }).catch(error => {
-                        console.log('No se pudo registrar');
-                    })
-                } else {
-                    res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
+                            mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (error, data) => {
+                                if (!error) {
+                                    res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
+                                } else {
+                                    res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
+                                }
+                            });
+                        }).catch(error => {
+                            console.log('No se pudo registrar');
+                        })
+                    } else {
+                        res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
+                    }
+                }else{
+                    res.status(400).send({ status: "Error", message: "Error de red", code: 400 });
                 }
             })
-        }else{
+            }else{
             res.status(400).send({ status: "Error", message: "Email en uso", code: 400 });
-        } 
+            } 
         }else{
             res.status(400).send({ status: "Error", message: "Error de red", code: 400 });
         }

@@ -24,37 +24,44 @@ trabajadorController.registro_trabajador = (req, res) => {
     const sql = 'call SP_POST_RegistroTrabajador(?,?,?,?,?,?,?,?,?)';
 
     mysql.query('SELECT*FROM trabajadores WHERE emailTrabajadores = ?', [_emailTrabajadores], (er, dt) => {
-        if(dt[0] == undefined){
+        if(!er){
+            if (dt[0] == undefined) {
 
-            mysql.query('SELECT*FROM persona AS p WHERE p.dni = ?', [_dni], (error, data) => {
-                if (data[0] == undefined) {
+                mysql.query('SELECT*FROM persona AS p WHERE p.dni = ?', [_dni], (error, data) => {
 
-                    encriptacion.password(_password).then(passwordEncriptado => {
+                    if(!error){
+                        if (data[0] == undefined) {
 
-                        cloudinary.v2.uploader.upload(_foto).then(result => {
+                            encriptacion.password(_password).then(passwordEncriptado => {
 
-                            mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (error, data) => {
-                                if (!error) {
-                                    fs.unlink(_foto, () => {
-                                        res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
+                                cloudinary.v2.uploader.upload(_foto).then(result => {
+
+                                    mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, result.url, _emailTrabajadores, passwordEncriptado, _telefono], (error, data) => {
+                                        if (!error) {
+                                            fs.unlink(_foto, () => {
+                                                res.status(200).send({ status: "Success", message: "Registrado", code: 200 });
+                                            });
+                                        } else {
+                                            res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
+                                        }
                                     });
-                                } else {
-                                    res.status(400).send({ status: "Error", message: "No se pudo registrar", code: 400 });
-                                }
-                            });
-                        }).catch(error => {
-                            console.log('No se obtuvo respuesta de cloudinary: ', error);
-                        })
+                                }).catch(error => {
+                                    console.log('No se obtuvo respuesta de cloudinary: ', error);
+                                })
 
-                    }).catch(error => {
-                        console.log('Error de red');
-                    })
-                } else {
-                    res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
-                }
-            })
+                            }).catch(error => {
+                                console.log('Error de red');
+                            })
+                        } else {
+                            res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
+                        }
+                    }else{
+                    }
+                })
+            } else {
+                res.status(400).send({ status: "Error", message: "Email en uso", code: 400 });
+            }
         }else{
-            res.status(400).send({ status: "Error", message: "Email en uso", code: 400 });
         }
     })
 };
