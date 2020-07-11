@@ -4,8 +4,10 @@ const encriptacion = {};
 
 encriptacion.password = (password) => {
     let passwordEncriptado;
-    bcrypt.genSalt(10).then(salt => {
-        passwordEncriptado = bcrypt.hash(password, salt);
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+            passwordEncriptado = hash;
+        })
     })
     return passwordEncriptado;
 };
