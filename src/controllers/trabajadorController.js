@@ -122,8 +122,8 @@ trabajadorController.subir_publicacion_galeria = (req, res) => {
             }
         }
         );
-    }).catch(error => {
-        console.log('No se obtuvo respuesta de cloudinary: ', error);
+    }).catch(err => {
+        res.status(400).send({ status: "Error", message: "No se pudo guardar la imagen", code: 400 });
     })
 };
 
@@ -181,8 +181,8 @@ trabajadorController.editar_foto_perfil_trabajador = (req, res) => {
                 res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
             }
         })
-    }).catch(error => {
-        console.log('No se obtuvo respuesta de cloudinary: ', error);
+    }).catch(err => {
+        res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
     })
 };
 
@@ -209,8 +209,8 @@ trabajadorController.denunciar_solicitante = (req, res) => {
             }
         }
         );
-    }).catch(error => {
-        console.log('No se obtuvo respuesta de cloudinary: ', error);
+    }).catch(err => {
+        res.status(400).send({ status: "Error", message: "Denuncia no enviada, error del servidor", code: 400 });
     })
 };
 

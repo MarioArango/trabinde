@@ -85,7 +85,7 @@ administradorController.deshabilitar_habilitar_trabajador = (req, res) => {
                     if (estadoUsuario == 1) {
                         res.status(200).send({ status: "Success", message: "Trabajador deshabilitado", code: 200 });
                     } else {
-                    res.status(200).send({ status: "Success", message: "Trabajador habilitado", code: 200 });
+                        res.status(200).send({ status: "Success", message: "Trabajador habilitado", code: 200 });
                 }
                 } else {
                     res.status(400).send({ status: "Error", message: "No se deshabilitar el usuario", code: 400 });
@@ -94,8 +94,6 @@ administradorController.deshabilitar_habilitar_trabajador = (req, res) => {
         } else {
             res.status(400).send({ status: "Error", message: "DNI no existente", code: 400 });
         }
-        
-        
     })
 
 
