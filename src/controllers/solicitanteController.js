@@ -182,7 +182,7 @@ solicitanteController.listar_contratos_con_trabajadores = (req, res) => {
             res.status(200).send({ status: "Success", message: data[0], code: 200 });
 
         } else {
-            res.status(400).send({ status: "Error", message: "Error en el servidor", code: 400 });
+            res.status(400).send({ status: "Error", message: "Error en el servidor, no se pudo obtener datos", code: 400 });
         }
     }
     );
