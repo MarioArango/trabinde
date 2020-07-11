@@ -29,7 +29,6 @@ solicitanteController.registro_solicitante = (req, res) => {
                 if(!error){
                     if (data[0] == undefined) {
                         encriptacion.password(_password).then(passwordEncriptado => {
-                            console.log(passwordEncriptado);
 
                             mysql.query(sql, [_nombre, _apellidoPaterno, _apellidoMaterno, _dni, _distrito, _emailSolicitantes, passwordEncriptado], (error, data) => {
                                 if (!error) {
@@ -54,8 +53,6 @@ solicitanteController.registro_solicitante = (req, res) => {
         }else{
             res.status(400).send({ status: "Error", message: "Error de red", code: 400 });
         }
-        
-        
     })
 };
 
