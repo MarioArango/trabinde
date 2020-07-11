@@ -121,13 +121,14 @@ solicitanteController.buscador_servicios_trabajadores = (req, res) => {
 
 //ITERACION 2
 solicitanteController.calificar_trabajador_individual = (req, res) => {
-    const sql = "call SP_POST_CalificarTrabajadorIndividual(?,?,?)";
+    
     const { _idTrabajadores, _idSolicitantes, _calificacionIndividual } = req.body;
+    const sql = "call SP_POST_CalificarTrabajadorIndividual(?,?,?)";
     mysql.query(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], (error, data) => {
         if(!error){
             res.status(200).send({ status: "Success", message: "Calificacion asignada", code: 200 });
         }else {
-            res.status(400).send({ status: "Error", error, code: 400 });
+            res.status(400).send({ status: "Error", error: "No se pudo calificar", code: 400 });
         }
     }); 
 };
