@@ -49,20 +49,24 @@ administradorController.deshabilitar_habilitar_solicitante= (req, res) => {
     const sql1 = 'SELECT s.estadoUsuario FROM solicitantes AS s JOIN persona AS p ON s.idPersona = p.idPersona WHERE p.dni = ?'
 
     mysql.query(sql1, [_dni], (error, data) => {
-        
-        const estadoUsuario = data[0].estadoUsuario;
 
-        mysql.query(sql, [_dni], (err, dat) => {
-            if (!error) {
-                if (estadoUsuario==1){
-                    res.status(200).send({ status: "Success", message: "Solicitante deshabilitado", code: 200 });
+        if (!error){
+           const estadoUsuario = data[0].estadoUsuario;
+
+            mysql.query(sql, [_dni], (err, dat) => {
+                if (!err) {
+                    if (estadoUsuario==1){
+                        res.status(200).send({ status: "Success", message: "Solicitante deshabilitado", code: 200 });
                 }else{
                     res.status(200).send({ status: "Success", message: "Solicitante habilitado", code: 200 });
                 }
             } else {
                 res.status(400).send({ status: "Error", message: "No se deshabilitar el usuario", code: 400 });
         } 
-            })
+            }) 
+        }else{
+            res.status(400).send({ status: "Error", message: "DNI no existente", code: 400 });
+        }
     })
 };
 
@@ -73,19 +77,25 @@ administradorController.deshabilitar_habilitar_trabajador = (req, res) => {
 
     mysql.query(sql1, [_dni], (error, data) => {
 
-        const estadoUsuario = data[0].estadoUsuario;
+        if(!error){
+            const estadoUsuario = data[0].estadoUsuario;
 
-        mysql.query(sql, [_dni], (err, dat) => {
-            if (!error) {
-                if (estadoUsuario == 1) {
-                    res.status(200).send({ status: "Success", message: "Trabajador deshabilitado", code: 200 });
-                } else {
+            mysql.query(sql, [_dni], (err, dat) => {
+                if (!error) {
+                    if (estadoUsuario == 1) {
+                        res.status(200).send({ status: "Success", message: "Trabajador deshabilitado", code: 200 });
+                    } else {
                     res.status(200).send({ status: "Success", message: "Trabajador habilitado", code: 200 });
                 }
-            } else {
-                res.status(400).send({ status: "Error", message: "No se deshabilitar el usuario", code: 400 });
-            }
-        })
+                } else {
+                    res.status(400).send({ status: "Error", message: "No se deshabilitar el usuario", code: 400 });
+                }
+            })
+        } else {
+            res.status(400).send({ status: "Error", message: "DNI no existente", code: 400 });
+        }
+        
+        
     })
 
 
