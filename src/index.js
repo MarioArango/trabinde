@@ -59,11 +59,11 @@ app.use('/api/trabajador', trabajadorRoutes);
 //INITIALIZATION
 const init = () => {
     
-        app.listen(app.get('port'), (error ) => {
+        app.listen(app.get('port'), () => {
             if(!error){
                console.log(`Conectado al servidor en el puerto ${app.get('port')}`); 
             }else{
-                console.log(`Error en el servidor: ${error}`);
+                console.log(`Error en el servidor`);
             }
         });
 }
