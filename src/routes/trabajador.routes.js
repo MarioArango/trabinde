@@ -15,7 +15,7 @@ router.post('/subir-publicacion-galeria', verificarToken, trabajadorController.s
 router.get('/perfil-publico-trabajador', verificarToken, trabajadorController.perfil_publico_trabajador);
 router.get('/perfil-privado-trabajador', verificarToken, trabajadorController.perfil_privado_trabajador);
 
-router.put('/editar-perfil-trabajador', verificarToken, trabajadorController.editar_foto_perfil_trabajador);
+router.put('/editar-perfil-trabajador', verificarToken, trabajadorController.editar_perfil_trabajador);
 
 //ITERACION 4
 router.put('/denunciar-solicitante', verificarToken, trabajadorController.denunciar_solicitante);
