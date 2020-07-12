@@ -134,9 +134,13 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
         if(!error){
             let perfil = data[0][0];
             mysql.query(sql2, [_idTrabajadores], (err, dat) => {
-                perfil.publicaciones = dat[0];
                 if (!err) {
-                    res.status(200).send({ status: "Success", data: perfil, code: 200 });
+                    if (dat[0]){
+                        perfil.publicaciones = dat[0];
+                        res.status(200).send({ status: "Success", data: perfil, code: 200 });  
+                    }else{
+
+                    } 
                 } else {
                     res.status(400).send({ status: "Error", message: "Trabajador no encontrado", code: 400 });
                 }   
