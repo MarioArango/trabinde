@@ -132,7 +132,7 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
     const sql2 = 'call SP_GET_ListarPublicaciones(?)';
     mysql.query(sql1, [_idTrabajadores], (error, data) => {
         if(!error){
-            const perfil = data[0][0];
+            let perfil = data[0][0];
             mysql.query(sql2, [_idTrabajadores], (err, dat) => {
                 perfil.publicaciones = dat[0];
                 if (!err) {
