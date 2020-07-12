@@ -129,23 +129,20 @@ trabajadorController.subir_publicacion_galeria = (req, res) => {
 trabajadorController.perfil_publico_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
     const sql = 'call SP_GET_PerfilPrivadoTrabajador(?)'
-    mysql.query(sql, [_idTrabajadores], (error, data) => {
+    const sqll = "call SP_GET_ListarPublicaciones(?)"
+    /*mysql.query(sql, [_idTrabajadores], (error, data) => {
         if (!error) {
             res.status(200).send({ status: "Success", data: data[0], code: 200 });
         } else {
             res.status(400).send({ status: "Error", message: "Trabajador no encontrado", code: 400 });
         }
     }
-    );
-    /*const { _idTrabajadores } = req.body;
-    const sql = "call SP_GET_PerfilPrivadoTrabajador(?)";
-    const sql2 = "call SP_GET_ListarPublicaciones(?)";
+    );*/
+    
     mysql.query(sql, [_idTrabajadores], (error, data) => {
         if(!error){
-            let perfil = data[0][0];
-            console.log(perfil);
-            res.json(data)
-            /*mysql.query(sql2, [_idTrabajadores], (err, dat) => {
+            const perfil = data[0][0];
+            mysql.query(sqll, [_idTrabajadores], (err, dat) => {
                 if (!err) {
                     if (dat[0].length != 0){
                         perfil.publicaciones = dat[0];
@@ -160,7 +157,7 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
         }else {
             res.status(400).send({ status: "Error", message: "Error del servidor", code: 400 });
         }
-    });*/
+    });
 };
 
 
