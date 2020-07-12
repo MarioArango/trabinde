@@ -133,14 +133,13 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
     mysql.query(sql1, [_idTrabajadores], (error, data) => {
         if(!error){
             let perfil = data[0][0];
+        
             mysql.query(sql2, [_idTrabajadores], (err, dat) => {
                 if (!err) {
-                    
                     if (dat[0].length != 0){
                         perfil.publicaciones = dat[0];
                         res.status(200).send({ status: "Success", data: perfil, code: 200 });  
                     }else{
-                        perfil.publicaciones = [];
                         res.status(400).send({ status: "Success", message: perfil, code: 400 });
                     }
                 } else {
