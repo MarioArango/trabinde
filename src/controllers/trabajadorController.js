@@ -142,7 +142,7 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
                 }   
             })
         }else {
-            res.status(400).send({ status: "Error", message: "Perfil no encontrado", code: 400 });
+            res.status(400).send({ status: "Error", message: "Error del servidor", code: 400 });
         }
     }
     );
@@ -163,11 +163,11 @@ trabajadorController.perfil_privado_trabajador = (req, res) => {
 };
 
 
-trabajadorController.editar_foto_perfil_trabajador = (req, res) => {
+trabajadorController.editar_perfil_trabajador = (req, res) => {
     //const { _idPersona, _foto } = req.body;
     const { _idPersona, _nombreRubro } = req.body;
     const _foto = req.file.path;
-    const sql = 'call SP_PUT_EditarFotoPerfilTrabajador(?,?)'
+    const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
 
     cloudinary.v2.uploader.upload(_foto).then(result=> {
         mysql.query(sql, [_idPersona, _nombreRubro, result.url], (error, data) => {
