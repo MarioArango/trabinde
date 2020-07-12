@@ -133,7 +133,7 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
     mysql.query(sql1, [_idTrabajadores], (error, data) => {
         if(!error){
             let perfil = data[0][0];
-        
+            console.log(perfil);
             mysql.query(sql2, [_idTrabajadores], (err, dat) => {
                 if (!err) {
                     if (dat[0].length != 0){
