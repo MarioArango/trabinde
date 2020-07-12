@@ -128,8 +128,8 @@ trabajadorController.subir_publicacion_galeria = (req, res) => {
 
 trabajadorController.perfil_publico_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
-    const sql1 = 'call SP_GET_PerfilPrivadoTrabajador(?)';
-    const sql2 = 'call SP_GET_ListarPublicaciones(?)';
+    const sql1 = "call SP_GET_PerfilPrivadoTrabajador(?)";
+    const sql2 = "call SP_GET_ListarPublicaciones(?)";
     mysql.query(sql1, [_idTrabajadores], (error, data) => {
         if(!error){
             let perfil = data[0][0];
