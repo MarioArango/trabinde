@@ -163,7 +163,7 @@ solicitanteController.calificar_trabajador_individual = (req, res) => {
 solicitanteController.perfil_solicitante = (req, res) => {
     const { _idSolicitantes } = req.body;
     const sql = "call SP_GET_PerfilSolicitante(?)"
-    const sqll = 'SELECT*FROM solicitantes WHERE s.idSolicitantes = ?';
+    const sqll = 'SELECT*FROM solicitantes AS s WHERE s.idSolicitantes = ?';
 
     mysql.query(sqll, [_idSolicitantes], (err, dat) => {
         if(!err){
