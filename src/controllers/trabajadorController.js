@@ -202,12 +202,12 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
     const _foto = req.file.path;
     const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
     const sqll = 'SELECT*FROM persona AS p WHERE p.idPersona = ?';
-    const sqll = "SELECT*FROM rubros AS r WHERE r.nombreRubro = ?";
+    const sqlll = "SELECT*FROM rubros AS r WHERE r.nombreRubro = ?";
 
     mysql.query(sqll, [_idPersona], (err, dat) => {
         if(!err){
             if(dat.length != 0){
-                mysql.query(sqll, [_nombreRubro], (e, d) => {
+                mysql.query(sqlll, [_nombreRubro], (e, d) => {
                     if(!e){
                         if(d.length != 0){
                             cloudinary.v2.uploader.upload(_foto).then(result => {

@@ -6,7 +6,7 @@ const router = Router();
 
 //ITERACION 3
 
-router.get('/login-administrador', administradorController.login_administrador);
+router.post('/login-administrador', administradorController.login_administrador);
 router.get('/listar-trabajadores', verificarToken, administradorController.listar_trabajadores);
 router.get('/listar-solicitantes', verificarToken, administradorController.listar_solicitantes);
 router.put('/deshabilitar-habilitar-solicitante', verificarToken, administradorController.deshabilitar_habilitar_solicitante);
