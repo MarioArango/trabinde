@@ -8,7 +8,11 @@ administradorController.login_administrador = (req, res) => {
     const { _dni, _password } = req.body;
     const sql = 'call SP_GET_LoginAdministrador(?,?)';
 
-    mysql.query(sql, [_dni, _password], (error, data) => {
+    mysql.query('SELECT p.dni FROM persona AS p WHERE p.dni = ?', [_dni], (error, data) => {
+        res.send(data);
+    })
+
+    /*mysql.query(sql, [_dni, _password], (error, data) => {
 
         if (!error) {
             const tkn = token.signToken(data[0][0].idAdministradores);
@@ -17,7 +21,7 @@ administradorController.login_administrador = (req, res) => {
             res.status(400).send({ status: "Error", message: "Administrador no encontrado", code: 400 });
         }
     }
-    );
+    );*/
 };
 
 administradorController.listar_trabajadores = (req, res) => {
