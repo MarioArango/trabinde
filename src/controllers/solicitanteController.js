@@ -138,7 +138,7 @@ solicitanteController.calificar_trabajador_individual = (req, res) => {
     
     const { _idTrabajadores, _idSolicitantes, _calificacionIndividual } = req.body;
     const sql = "call SP_PUT_CalificarTrabajadorIndividual(?,?,?)";
-    const sqll = 'SELECT*FROM solicitudes AS s WHERE s.idTrabajadores = ? AND s.idSolicitantes = ?';
+    const sqll = 'CALL SP_GET_ExistenciaDeSolicitudes(?,?)';
 
     mysql.query(sqll, [_idTrabajadores, _idSolicitantes], (err, dat) => {
         if(!err){
