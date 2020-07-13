@@ -68,7 +68,7 @@ trabajadorController.registro_trabajador = (req, res) => {
 trabajadorController.login_trabajador = (req, res) => {
     const { _emailTrabajadores, _password } = req.body;
      
-    const sql = 'call SP_GET_LoginTrabajador(?, ?)';
+    const sql = 'call SP_POST_LoginTrabajador(?, ?)';
 
     const sql2 = 'SELECT t.emailTrabajadores, t.password FROM trabajadores AS t WHERE t.emailTrabajadores = ?';
 
@@ -135,8 +135,8 @@ trabajadorController.subir_publicacion_galeria = (req, res) => {
 
 trabajadorController.perfil_publico_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
-    const sql = 'call SP_GET_PerfilPrivadoTrabajador(?)'
-    const sqll = "call SP_GET_ListarPublicaciones(?)"
+    const sql = 'call SP_POST_PerfilPrivadoTrabajador(?)'
+    const sqll = "call SP_POST_ListarPublicaciones(?)"
     const sqlll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
 
     mysql.query(sqlll, [_idTrabajadores], (er, dt) => {
@@ -173,7 +173,7 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
 
 trabajadorController.perfil_privado_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
-    const sql = 'call SP_GET_PerfilPrivadoTrabajador(?)'
+    const sql = 'call SP_POST_PerfilPrivadoTrabajador(?)'
     const sqll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
 
     mysql.query(sqll, [_idTrabajadores], (err, dat) => {
@@ -280,7 +280,7 @@ trabajadorController.denunciar_solicitante = (req, res) => {
 trabajadorController.listar_contratos_con_solicitantes = (req, res) => {
     
     const { _idTrabajadores } = req.body;
-    const sql = 'call SP_GET_ListarContratosConSolicitantes(?)';
+    const sql = 'call SP_POST_ListarContratosConSolicitantes(?)';
     const sqll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
 
     mysql.query(sqll, [_idTrabajadores], (err, dat) => {
