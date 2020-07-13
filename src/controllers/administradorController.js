@@ -122,7 +122,7 @@ administradorController.deshabilitar_habilitar_trabajador = (req, res) => {
 //FOTO
 administradorController.numero_denuncias_solicitante = (req, res) => {
     const { _idSolicitantes } = req.body;
-    const sql = 'call SP_GET_AdministradorNumeroDeDenunciasDelSolicitantes(?)';
+    const sql = 'call SP_POST_AdministradorNumeroDeDenunciasDelSolicitantes(?)';
     const sqll = 'SELECT*FROM solicitantes AS s WHERE s.idSolicitantes = ?';
 
     mysql.query(sqll, [_idSolicitantes], (err, dat) => {
@@ -146,7 +146,7 @@ administradorController.numero_denuncias_solicitante = (req, res) => {
 
 administradorController.numero_denuncias_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
-    const sql = 'call SP_GET_AdministradorNumeroDeDenunciasDelTrabajador(?)';
+    const sql = 'call SP_POST_AdministradorNumeroDeDenunciasDelTrabajador(?)';
     const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
 
     mysql.query(sqll, [_idTrabajadores], (err, dat) => {
@@ -170,7 +170,7 @@ administradorController.numero_denuncias_trabajador = (req, res) => {
 
 administradorController.listar_denuncias_a_solicitantes = (req, res) => {
     const { _idSolicitantes } = req.body;
-    const sql = 'call SP_GET_ListarDenunciasASolicitantes(?)';
+    const sql = 'call SP_POST_ListarDenunciasASolicitantes(?)';
     const sqll = 'SELECT*FROM solicitantes AS s WHERE s.idSolicitantes = ?';
 
     mysql.query(sqll, [_idSolicitantes], (err, dat) => {
@@ -194,7 +194,7 @@ administradorController.listar_denuncias_a_solicitantes = (req, res) => {
 
 administradorController.listar_denuncias_a_trabajadores = (req, res) => {
     const { _idTrabajadores } = req.body;
-    const sql = 'call SP_GET_ListarDenunciasATrabajadores(?)';
+    const sql = 'call SP_POST_ListarDenunciasATrabajadores(?)';
     const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
     
     mysql.query(sqll, [_idTrabajadores], (err, dat) => {
