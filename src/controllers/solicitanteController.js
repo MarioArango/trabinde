@@ -142,7 +142,7 @@ solicitanteController.calificar_trabajador_individual = (req, res) => {
 
     mysql.query(sqll, [_idTrabajadores, _idSolicitantes], (err, dat) => {
         if(!err){
-            if(dat.length != 0){
+            if(dat[0].length != 0){
                 mysql.query(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], (error, data) => {
                     if (!error) {
                         res.status(200).send({ status: "Success", message: "Calificacion asignada", code: 200 });
