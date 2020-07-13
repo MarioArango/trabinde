@@ -202,22 +202,33 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
     const _foto = req.file.path;
     const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
     const sqll = 'SELECT*FROM persona AS p WHERE p.idPersona = ?';
+    const sqll = "SELECT*FROM rubros AS r WHERE r.nombreRubro = ?";
 
     mysql.query(sqll, [_idPersona], (err, dat) => {
         if(!err){
             if(dat.length != 0){
-                cloudinary.v2.uploader.upload(_foto).then(result => {
-                    mysql.query(sql, [_idPersona, _nombreRubro, result.url], (error, data) => {
-                        if (!error) {
-                            fs.unlink(_foto, () => {
-                                res.status(200).send({ status: "Success", message: "Foto actualizada", code: 200 });
+                mysql.query(sqll, [_nombreRubro], (e, d) => {
+                    if(!e){
+                        if(d.length != 0){
+                            cloudinary.v2.uploader.upload(_foto).then(result => {
+                                mysql.query(sql, [_idPersona, _nombreRubro, result.url], (error, data) => {
+                                    if (!error) {
+                                        fs.unlink(_foto, () => {
+                                            res.status(200).send({ status: "Success", message: "Foto actualizada", code: 200 });
+                                        });
+                                    } else {
+                                        res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
+                                    }
+                                })
+                            }).catch(err => {
+                                res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
                             });
-                        } else {
-                            res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
+                        }else {
+                            res.status(400).send({ status: "Error", message: "Rubro no permitido", code: 400 });
                         }
-                    })
-                }).catch(err => {
-                    res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
+                    }else{
+                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                    }
                 });
             }else {
                 res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
