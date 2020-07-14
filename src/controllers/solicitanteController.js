@@ -88,7 +88,7 @@ solicitanteController.login_solicitante = (req, res) => {
 
 
 solicitanteController.listar_servicios_trabajadores = (req, res) => {
-    const sql = 'call SP_POST_ListarServiciosTrabajadores()';
+    const sql = 'call SP_GET_ListarServiciosTrabajadores()';
     mysql.query(sql, (error, data) => {
         if(!error){
             if(data.length != 0){

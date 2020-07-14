@@ -9,7 +9,7 @@ router.post('/registro-solicitante', solicitanteController.registro_solicitante)
 
 router.post('/login-solicitante', solicitanteController.login_solicitante);
 
-router.post('/listar-servicios-trabajadores', verificarToken, solicitanteController.listar_servicios_trabajadores);
+router.get('/listar-servicios-trabajadores', verificarToken, solicitanteController.listar_servicios_trabajadores);
 
 router.post('/buscador-servicios-trabajadores', verificarToken, solicitanteController.buscador_servicios_trabajadores);
 
