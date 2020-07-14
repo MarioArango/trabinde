@@ -5,9 +5,9 @@ const administradorController = {};
 
 //ITERACION 3
 administradorController.login_administrador = (req, res) => {
-    const { _dni, _password } = req.body;
+    let { _dni, _password } = req.body;
     const sql = 'call SP_POST_LoginAdministrador(?,?)';
-    const sqll = 'SELECT p.dni FROM persona AS p WHERE p.dni = ?';
+    const sqll = 'SELECT*FROM persona AS p WHERE p.dni = ?';
 
     mysql.query(sqll, [_dni], (error, data) => {
         if(!error){
