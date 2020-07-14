@@ -11,8 +11,7 @@ administradorController.login_administrador = (req, res) => {
     mysql.query('SELECT p.dni FROM persona AS p WHERE p.dni = ?', [_dni], (err, dat) => {
         if(!err){
             if(dat.length != 0){
-                res.send({dat})
-               /*mysql.query(sql, [_dni, _password], (error, data) => {
+               mysql.query(sql, [dat[0].dni, _password], (error, data) => {
                    if (!error) {
                        if(data.length != 0){
                            const tkn = token.signToken(data[0][0].idAdministradores);
@@ -23,7 +22,7 @@ administradorController.login_administrador = (req, res) => {
                     }else {
                         res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                     }
-                });*/
+                });
             }else {
                 res.status(400).send({ status: "Error", message: "DNI no registrado", code: 400 });
             } 
