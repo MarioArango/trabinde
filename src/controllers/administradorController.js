@@ -14,7 +14,7 @@ administradorController.login_administrador = (req, res) => {
                mysql.query(sql, [_dni, _password], (error, data) => {
                    if (!error) {
                     const tkn = token.signToken(data[0][0].idAdministradores);
-                    res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200 });
+                    res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200, longitud: data.length });
                 } else {
                     res.status(400).send({ status: "Error", message: "Administrador no encontrado", code: 400 });
                 }
