@@ -13,10 +13,12 @@ administradorController.login_administrador = (req, res) => {
             if(dat.length != 0){
                mysql.query(sql, [_dni, _password], (error, data) => {
                    if (!error) {
-
-
-                    const tkn = token.signToken(data[0][0].idAdministradores);
-                    res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200 });
+                       if(data.length != 0){
+                           const tkn = token.signToken(data[0][0].idAdministradores);
+                           res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200 });
+                       }else {
+                           res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
+                       }
                 } else {
                     res.status(400).send({ status: "Error", message: "Administrador no encontrado", code: 400 });
                 }
