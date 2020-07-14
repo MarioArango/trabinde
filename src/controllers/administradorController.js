@@ -13,7 +13,7 @@ administradorController.login_administrador = (req, res) => {
             if(dat.length != 0){
                mysql.query(sql, [dat[0].dni, _password], (error, data) => {
                    if (!error) {
-                       res.send({data})
+                       res.json(data)
                        /*if(data.length != 0){
                            const tkn = token.signToken(data[0][0].idAdministradores);
                            res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200 });
