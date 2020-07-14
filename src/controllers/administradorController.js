@@ -7,17 +7,29 @@ const administradorController = {};
 administradorController.login_administrador = (req, res) => {
     const { _dni, _password } = req.body;
     const sql = 'call SP_POST_LoginAdministrador(?,?)';
+    const sqll = 'SELECT p.dni FROM persona AS p WHERE p.dni = ?';
+    const sqlll = 'SELECT*FROM administradores AS a WHERE a.password = _password';
 
-    mysql.query('SELECT p.dni FROM persona AS p WHERE p.dni = ?', [_dni], (error, data) => {
+    mysql.query(sqll, [_dni], (error, data) => {
         if(!error){
             if(data.length != 0){
-               mysql.query(sql, [_dni, _password], (error, data) => {
-                   if (!error) {
-                    const tkn = token.signToken(data[0][0].idAdministradores);
-                    res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200, longitud: data.length });
-                } else {
-                    res.status(400).send({ status: "Error", message: "Administrador no encontrado", code: 400 });
-                }
+                mysql.query(sqlll, [_password], (err, dat) => {
+                    if(!err){
+                        if(dat.length != 0){
+                            mysql.query(sql, [_dni, _password], (error, data) => {
+                                if (!error) {
+                                    const tkn = token.signToken(data[0][0].idAdministradores);
+                                    res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200, longitud: data.length });
+                                }else {
+                                    res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                                }
+                            });
+                        }else {
+                            res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 })
+                        }
+                    }else {
+                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                    }
                 });
             }else {
                 res.status(400).send({ status: "Error", message: "DNI no registrado", code: 400 });
