@@ -19,9 +19,9 @@ administradorController.login_administrador = (req, res) => {
                        }else {
                            res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
                        }
-                } else {
-                    res.status(400).send({ status: "Error", message: "Administrador no encontrado", code: 400 });
-                }
+                    }else {
+                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                    }
                 });
             }else {
                 res.status(400).send({ status: "Error", message: "DNI no registrado", code: 400 });
