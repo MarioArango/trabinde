@@ -56,7 +56,7 @@ solicitanteController.registro_solicitante = (req, res) => {
 
 solicitanteController.login_solicitante = (req, res) => {
     const { _emailSolicitantes, _password } = req.body;
-    const sql = 'call SP_GET_LoginSolicitante(?, ?)';
+    const sql = 'call SP_POST_LoginSolicitante(?, ?)';
     const sql2 = 'SELECT s.emailSolicitantes, s.password FROM solicitantes AS s WHERE s.emailSolicitantes = ?';
     
     mysql.query(sql2, [_emailSolicitantes], (error, dat) => {
@@ -88,7 +88,7 @@ solicitanteController.login_solicitante = (req, res) => {
 
 
 solicitanteController.listar_servicios_trabajadores = (req, res) => {
-    const sql = 'call SP_GET_ListarServiciosTrabajadores()';
+    const sql = 'call SP_POST_ListarServiciosTrabajadores()';
     mysql.query(sql, (error, data) => {
         if(!error){
             if(data.length != 0){
@@ -105,7 +105,7 @@ solicitanteController.listar_servicios_trabajadores = (req, res) => {
 
 solicitanteController.buscador_servicios_trabajadores = (req, res) => {
     const { _nombreRubro } = req.body;
-    const sql = "call SP_GET_BuscadorServiciosTrabajadores(?)";
+    const sql = "call SP_POST_BuscadorServiciosTrabajadores(?)";
     const sqll = 'SELECT*FROM rubros AS r WHERE r.nombreRubro = ? ';
 
 
@@ -164,7 +164,7 @@ solicitanteController.calificar_trabajador_individual = (req, res) => {
 
 solicitanteController.perfil_solicitante = (req, res) => {
     const { _idSolicitantes } = req.body;
-    const sql = "call SP_GET_PerfilSolicitante(?)"
+    const sql = "call SP_POST_PerfilSolicitante(?)"
     const sqll = 'SELECT*FROM solicitantes AS s WHERE s.idSolicitantes = ?';
 
     mysql.query(sqll, [_idSolicitantes], (err, dat) => {
@@ -223,7 +223,7 @@ solicitanteController.denunciar_trabajador = (req, res) => {
 
 solicitanteController.listar_contratos_con_trabajadores = (req, res) => {
     const { _idSolicitantes } = req.body;
-    const sql = "call SP_GET_ListarContratosConTrabajadores(?)";
+    const sql = "call SP_POST_ListarContratosConTrabajadores(?)";
     const sqll = "SELECT*FROM solicitantes AS s WHERE s.idSolicitantes = ?";
 
     mysql.query(sqll, [_idSolicitantes], (err, dat) => {
