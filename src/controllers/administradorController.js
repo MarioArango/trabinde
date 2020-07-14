@@ -12,11 +12,11 @@ administradorController.login_administrador = (req, res) => {
     mysql.query(sqll, [_dni], (error, data) => {
         if(!error){
             if(data.length != 0){
-                mysql.query(sql, [_dni, _password], (error, data) => {
-                    if (!error) {
-                        if(data.length != 0){
-                            const tkn = token.signToken(data[0][0].idAdministradores);
-                            res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200, longitud: data.length });
+                mysql.query(sql, [_dni, _password], (err, dat) => {
+                    if (!err) {
+                        if(dat.length != 0){
+                            const tkn = token.signToken(dat[0][0].idAdministradores);
+                            res.status(200).header('auth-token', tkn).send({ status: "Success", data: data[0][0], code: 200});
                         }else {
                             res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
                         }
