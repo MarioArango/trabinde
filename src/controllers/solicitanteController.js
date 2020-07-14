@@ -142,7 +142,7 @@ solicitanteController.calificar_trabajador_individual = (req, res) => {
 
     mysql.query(sqll, [_idTrabajadores, _idSolicitantes], (err, dat) => {
         if(!err){
-            res.json(dat)
+            res.send(dat)
             /*if(dat.length != 0){
                 mysql.query(sql, [_idTrabajadores, _idSolicitantes, _calificacionIndividual], (error, data) => {
                     if (!error) {
