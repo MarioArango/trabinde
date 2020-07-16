@@ -10,7 +10,14 @@ const mysqlConnection = mysql.createConnection({
     database: 'heroku_e57934221f5d2a7'
 });
 
-mysqlConnection.connect();
+mysqlConnection.connect(function (err) {
+    if (err) {
+        console.error('error connecting: ' + err.stack);
+        return;
+    }
+
+    console.log('connected as id ' + connection.threadId);
+});
 
 //const query = util.promisify(mysqlConnection.query).bind(mysqlConnection);
 
