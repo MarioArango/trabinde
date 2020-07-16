@@ -3,7 +3,8 @@
 const mysql = require('mysql');
 //import util from 'util';
 
-const mysqlConnection = mysql.createConnection({
+const mysqlConnection = mysql.createPool({
+    connectionLimit: 10,
     host: 'us-cdbr-east-02.cleardb.com',
     user: 'b9d3e2959e62be',
     password: 'd66d928b',
