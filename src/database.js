@@ -16,7 +16,7 @@ mysqlConnection.connect(function (err) {
         return;
     }
 
-    console.log('connected as id ' + connection.threadId);
+    console.log('connected as id ' + mysqlConnection.threadId);
 });
 
 //const query = util.promisify(mysqlConnection.query).bind(mysqlConnection);
