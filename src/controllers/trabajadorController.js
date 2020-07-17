@@ -199,7 +199,6 @@ trabajadorController.perfil_privado_trabajador = (req, res) => {
 trabajadorController.editar_perfil_trabajador = (req, res) => {
     //const { _idPersona, _foto } = req.body;
     const { _idTrabajadores, _nombreRubro } = req.body;
-    const _foto = req.file.path;
     const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
     const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
     const sqlll = "SELECT*FROM rubros AS r WHERE r.nombreRubro = ?";
@@ -212,6 +211,7 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                         if(d.length != 0){
                             const _idRubro = d[0].idRubro;
                             if(req.file){
+                                const _foto = req.file.path;
                                 res.send({status: "con foto"})
                             }else {
                                 res.send({status: "sin foto"})
