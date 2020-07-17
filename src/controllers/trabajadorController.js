@@ -213,7 +213,6 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                             const _idRubro = d[0].idRubro;
                             if(_foto){
                                 cloudinary.v2.uploader.upload(_foto).then(result => {
-                                        if(!er){
                                             mysql.query(sql, [_idTrabajadores, _idRubro, result.url], (error, data) => {
                                                 if (!error) {
                                                     fs.unlink(_foto, () => {
@@ -223,10 +222,6 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                                                     res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
                                                 }
                                             })
-                                        }else {
-                                            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                                        }
-                                    
                                 }).catch(err => {
                                     res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
                                 });
