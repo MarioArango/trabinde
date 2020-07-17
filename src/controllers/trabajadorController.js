@@ -210,7 +210,7 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                 mysql.query(sqlll, [_nombreRubro], (e, d) => {
                     if(!e){
                         if(d.length != 0){
-                            const _idRubro = d[0][0].idRubro;
+                            //const _idRubro = d[0][0].idRubro;
                             res.send(d)
                             /*if(_foto){
                                 cloudinary.v2.uploader.upload(_foto).then(result => {
