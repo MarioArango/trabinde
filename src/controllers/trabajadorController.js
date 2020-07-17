@@ -198,7 +198,7 @@ trabajadorController.perfil_privado_trabajador = (req, res) => {
 
 trabajadorController.editar_perfil_trabajador = (req, res) => {
     //const { _idPersona, _foto } = req.body;
-    const { _idPersona, _nombreRubro } = req.body;
+    const { _idTrabajadores, _nombreRubro } = req.body;
     const _foto = req.file.path;
     const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
     const sqll = 'SELECT*FROM persona AS p WHERE p.idPersona = ?';
@@ -210,23 +210,28 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                 mysql.query(sqlll, [_nombreRubro], (e, d) => {
                     if(!e){
                         if(d.length != 0){
+                            const _idRubro = d[0][0].idRubro;
                             if(_foto){
                                 cloudinary.v2.uploader.upload(_foto).then(result => {
-                                    mysql.query(sql, [_idPersona, _nombreRubro, result.url], (error, data) => {
-                                        if (!error) {
-                                            fs.unlink(_foto, () => {
-                                                res.status(200).send({ status: "Success", message: "Foto actualizada", code: 200 });
-                                            });
-                                        } else {
-                                            res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
+                                        if(!er){
+                                            mysql.query(sql, [_idTrabajadores, _idRubro, result.url], (error, data) => {
+                                                if (!error) {
+                                                    fs.unlink(_foto, () => {
+                                                        res.status(200).send({ status: "Success", message: "Perfil actualizado", code: 200 });
+                                                    });
+                                                } else {
+                                                    res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
+                                                }
+                                            })
+                                        }else {
+                                            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                                         }
-                                    })
+                                    
                                 }).catch(err => {
                                     res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
                                 });
                             }else {
-
-                                mysql.query('UPDATE rubros AS r JOIN trabajadores AS t ON r.idRubro = t.idRubro SET r.nombreRubro = ? WHERE t.idPersona = ? ', [_nombreRubro, _idPersona], (er, dt) => {
+                                mysql.query('UPDATE trabajadores AS t JOIN rubros AS r ON r.idRubro = t.idRubro SET t.idRubro = ? WHERE t.idTrabajadores = ? ', [_idRubro, _idTrabajadores], (er, dt) => {
                                     if(!er){
                                         res.status(200).send({ status: "Success", message: "Rubro actualizado", code: 200 });
                                     }else {
