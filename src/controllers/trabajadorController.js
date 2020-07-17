@@ -201,10 +201,10 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
     const { _idTrabajadores, _nombreRubro } = req.body;
     const _foto = req.file.path;
     const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
-    const sqll = 'SELECT*FROM persona AS p WHERE p.idPersona = ?';
+    const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
     const sqlll = "SELECT*FROM rubros AS r WHERE r.nombreRubro = ?";
 
-    mysql.query(sqll, [_idPersona], (err, dat) => {
+    mysql.query(sqll, [_idTrabajadores], (err, dat) => {
         if(!err){
             if(dat.length != 0){
                 mysql.query(sqlll, [_nombreRubro], (e, d) => {
