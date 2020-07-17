@@ -210,19 +210,30 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                 mysql.query(sqlll, [_nombreRubro], (e, d) => {
                     if(!e){
                         if(d.length != 0){
-                            cloudinary.v2.uploader.upload(_foto).then(result => {
-                                mysql.query(sql, [_idPersona, _nombreRubro, result.url], (error, data) => {
-                                    if (!error) {
-                                        fs.unlink(_foto, () => {
-                                            res.status(200).send({ status: "Success", message: "Foto actualizada", code: 200 });
-                                        });
-                                    } else {
-                                        res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
+                            if(_foto){
+                                cloudinary.v2.uploader.upload(_foto).then(result => {
+                                    mysql.query(sql, [_idPersona, _nombreRubro, result.url], (error, data) => {
+                                        if (!error) {
+                                            fs.unlink(_foto, () => {
+                                                res.status(200).send({ status: "Success", message: "Foto actualizada", code: 200 });
+                                            });
+                                        } else {
+                                            res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
+                                        }
+                                    })
+                                }).catch(err => {
+                                    res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
+                                });
+                            }else {
+
+                                mysql.query('UPDATE rubros AS r JOIN trabajadores AS t ON r.idRubro = t.idRubro SET r.nombreRubro = ? WHERE t.idPersona = ? ', [_nombreRubro, _idPersona], (er, dt) => {
+                                    if(!er){
+                                        res.status(200).send({ status: "Success", message: "Rubro actualizado", code: 200 });
+                                    }else {
+                                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                                     }
                                 })
-                            }).catch(err => {
-                                res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
-                            });
+                            }
                         }else {
                             res.status(400).send({ status: "Error", message: "Rubro no permitido", code: 400 });
                         }
