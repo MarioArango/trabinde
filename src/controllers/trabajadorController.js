@@ -211,7 +211,11 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                     if(!e){
                         if(d.length != 0){
                             const _idRubro = d[0].idRubro;
-                            res.send({foto: `_foto ${ asdasd}`})
+                            if(req.file.path){
+                                res.send({status: "con foto"})
+                            }else {
+                                res.send({status: "sin foto"})
+                            }
                             /*if(_foto){
                                 cloudinary.v2.uploader.upload(_foto).then(result => {
                                             mysql.query(sql, [_idTrabajadores, _idRubro, result.url], (error, data) => {
