@@ -212,11 +212,6 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                             const _idRubro = d[0].idRubro;
                             if(req.file){
                                 const _foto = req.file.path;
-                                res.send({status: "con foto"})
-                            }else {
-                                res.send({status: "sin foto"})
-                            }
-                            /*if(_foto){
                                 cloudinary.v2.uploader.upload(_foto).then(result => {
                                             mysql.query(sql, [_idTrabajadores, _idRubro, result.url], (error, data) => {
                                                 if (!error) {
@@ -238,7 +233,7 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                                         res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                                     }
                                 })
-                            }*/
+                            }
                         }else {
                             res.status(400).send({ status: "Error", message: "Rubro no permitido", code: 400 });
                         }
