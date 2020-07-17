@@ -211,7 +211,7 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                     if(!e){
                         if(d.length != 0){
                             const _idRubro = d[0].idRubro;
-                            if(req.file.path){
+                            if(req.file){
                                 res.send({status: "con foto"})
                             }else {
                                 res.send({status: "sin foto"})
