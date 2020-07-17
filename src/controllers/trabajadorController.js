@@ -210,9 +210,9 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                 mysql.query(sqlll, [_nombreRubro], (e, d) => {
                     if(!e){
                         if(d.length != 0){
-                            //const _idRubro = d[0][0].idRubro;
+                            const _idRubro = d[0].idRubro;
                             res.send(d)
-                            /*if(_foto){
+                            if(_foto){
                                 cloudinary.v2.uploader.upload(_foto).then(result => {
                                         if(!er){
                                             mysql.query(sql, [_idTrabajadores, _idRubro, result.url], (error, data) => {
@@ -239,7 +239,7 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
                                         res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                                     }
                                 })
-                            }*/
+                            }
                         }else {
                             res.status(400).send({ status: "Error", message: "Rubro no permitido", code: 400 });
                         }
