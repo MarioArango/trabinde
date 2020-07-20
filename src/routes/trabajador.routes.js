@@ -21,4 +21,6 @@ router.put('/editar-perfil-trabajador', verificarToken, trabajadorController.edi
 router.put('/denunciar-solicitante', verificarToken, trabajadorController.denunciar_solicitante);
 router.post('/listar-contratos-con-solicitantes', verificarToken, trabajadorController.listar_contratos_con_solicitantes);
 
+router.get('/listar-rubros', verificarToken, trabajadorController.listar_rubros);
+
 module.exports = router;

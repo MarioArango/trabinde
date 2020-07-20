@@ -313,4 +313,20 @@ trabajadorController.listar_contratos_con_solicitantes = (req, res) => {
     });
 };
 
+trabajadorController.listar_rubros = (req, res) => {
+
+    const sql = 'call SP_GET_ListarRubrosTrabajadores()';
+    mysql.query(sql, (error, data) => {
+        if(!error){
+            if(data[0] != 0){
+                res.status(200).send({ status: "Success", data: data[0], code: 200 });
+            }else {
+                res.status(400).send({ status: "Error", message: "Rubros no registrado", code: 400 });
+            }
+        }else {
+            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+        }
+    });
+}
+
 module.exports = trabajadorController;
