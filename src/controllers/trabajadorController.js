@@ -151,7 +151,7 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
                                     perfil.publicaciones = dat[0];
                                     res.status(200).send({ status: "Success, con publicaciones", perfil: perfil, code: 200 });
                                 } else {
-                                    res.status(500).send({ status: "Success, sin publicaciones", perfil: perfil, code: 500 });
+                                    res.status(200).send({ status: "Success, sin publicaciones", perfil: perfil, code: 200 });
                                 }
                             } else {
                                 res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
