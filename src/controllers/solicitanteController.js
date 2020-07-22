@@ -94,7 +94,7 @@ solicitanteController.listar_servicios_trabajadores = (req, res) => {
             if(data.length != 0){
                 res.status(200).send({ status: "Success", data: data[0], code: 200 });
             }else {
-                res.status(200).send({ status: "Success", message: "Aun no hay trabajadores registrados", code: 200 });
+                res.status(400).send({ status: "Success", message: "Aun no hay trabajadores registrados", code: 400 });
             }   
         }else{
             res.status(400).send({ status: "Error", error, code: 400 });
@@ -117,7 +117,7 @@ solicitanteController.buscador_servicios_trabajadores = (req, res) => {
                         if (data.length != 0) {
                             res.status(200).send({ status: "Success", data: data[0], code: 200 });
                         } else {
-                            res.status(200).send({ status: "Success", message: "No hay trabajadores registrados en este rubro", code: 200 });
+                            res.status(400).send({ status: "Success", message: "No hay trabajadores registrados en este rubro", code: 400 });
                         }
                     }else {
                         res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 })
@@ -177,7 +177,7 @@ solicitanteController.perfil_solicitante = (req, res) => {
                     }
                 });
             }else {
-                res.status(200).send({ status: "Error", message: "Solicitante no registrado", code: 200 });
+                res.status(400).send({ status: "Error", message: "Solicitante no registrado", code: 400 });
             }
         }else {
             res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });

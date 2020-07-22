@@ -39,7 +39,7 @@ administradorController.listar_trabajadores = (req, res) => {
             if(data.length != 0){
                 res.status(200).send({ status: "Success", data: data[0], code: 200 });
             }else{
-                res.status(200).send({ status: "Success", message: "No hay trabajadores registrados", code: 200 });
+                res.status(400).send({ status: "Success", message: "No hay trabajadores registrados", code: 400 });
             }
         } else {
             res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
@@ -54,7 +54,7 @@ administradorController.listar_solicitantes = (req, res) => {
             if(data.length != 0){
                res.status(200).send({ status: "Success", message: data[0], code: 200 }); 
             }else{
-                res.status(200).send({ status: "Success", message: "No hay solicitantes registrados", code: 200 });
+                res.status(400).send({ status: "Success", message: "No hay solicitantes registrados", code: 400 });
             }  
         } else {
             res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
