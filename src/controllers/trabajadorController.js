@@ -80,7 +80,7 @@ trabajadorController.login_trabajador = (req, res) => {
                     if (verf) {
                         mysql.query(sql, [_emailTrabajadores, passwordEncriptado], (err, data) => {
                             if (!err) {
-                                const tkn = token.signToken(data[0][0].idTrabajadores);
+                                const tkn = token.signToken(data[0][0].tipoUsuario);
                                 res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
                             } else {
                                 res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
@@ -100,8 +100,10 @@ trabajadorController.login_trabajador = (req, res) => {
 };
 
 //ITERACION 2
+//
 trabajadorController.subir_publicacion_galeria = (req, res) => {
-    //const { _idTrabajadores, _urlimagen, _descripcion } = req.body;
+    
+  if(req.payload.id == 1){
     const { _idTrabajadores, _descripcion } = req.body;
     const _urlimagen = req.file.path;
     const sql = 'call SP_POST_SubirPublicacionGaleria(?, ?, ?)';
@@ -130,9 +132,12 @@ trabajadorController.subir_publicacion_galeria = (req, res) => {
             res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
         }
     });
+  }else {
+    res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+  }
 };
 
-
+//PARA AMBOS
 trabajadorController.perfil_publico_trabajador = (req, res) => {
     const { _idTrabajadores } = req.body;
     const sql = 'call SP_POST_PerfilPrivadoTrabajador(?)'
@@ -170,84 +175,91 @@ trabajadorController.perfil_publico_trabajador = (req, res) => {
     });
 };
 
-
+//
 trabajadorController.perfil_privado_trabajador = (req, res) => {
-    const { _idTrabajadores } = req.body;
-    const sql = 'call SP_POST_PerfilPrivadoTrabajador(?)'
-    const sqll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
+    if(req.payload.id == 1){
+      const { _idTrabajadores } = req.body;
+      const sql = 'call SP_POST_PerfilPrivadoTrabajador(?)'
+      const sqll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
 
-    mysql.query(sqll, [_idTrabajadores], (err, dat) => {
-        if(!err){
-            if(dat.length != 0){
-                mysql.query(sql, [_idTrabajadores], (error, data) => {
-                    if (!error) {
-                        res.status(200).send({ status: "Success", data: data[0], code: 200 });
-                    } else {
-                        res.status(400).send({ status: "Error", message: "Trabajador no encontrado", code: 400 });
-                    }
-                });
-            }else {
-                res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
-            }
-        }else {
-            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-        }
-    });
+      mysql.query(sqll, [_idTrabajadores], (err, dat) => {
+          if(!err){
+              if(dat.length != 0){
+                  mysql.query(sql, [_idTrabajadores], (error, data) => {
+                      if (!error) {
+                          res.status(200).send({ status: "Success", data: data[0], code: 200 });
+                      } else {
+                          res.status(400).send({ status: "Error", message: "Trabajador no encontrado", code: 400 });
+                      }
+                  });
+              }else {
+                  res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+              }
+          }else {
+              res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+          }
+      });
+    }else {
+      res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
 };
 
-
+//
 trabajadorController.editar_perfil_trabajador = (req, res) => {
-    //const { _idPersona, _foto } = req.body;
-    const { _idTrabajadores, _nombreRubro } = req.body;
-    const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
-    const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
-    const sqlll = "SELECT*FROM rubros AS r WHERE r.nombreRubro = ?";
+    if(req.payload.id == 1){
+      const { _idTrabajadores, _nombreRubro } = req.body;
+      const sql = 'call SP_PUT_EditarPerfilTrabajador(?,?,?)';
+      const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
+      const sqlll = "SELECT*FROM rubros AS r WHERE r.nombreRubro = ?";
 
-    mysql.query(sqll, [_idTrabajadores], (err, dat) => {
-        if(!err){
-            if(dat.length != 0){
-                mysql.query(sqlll, [_nombreRubro], (e, d) => {
-                    if(!e){
-                        if(d.length != 0){
-                            const _idRubro = d[0].idRubro;
-                            if(req.file){
-                                const _foto = req.file.path;
-                                cloudinary.v2.uploader.upload(_foto).then(result => {
-                                            mysql.query(sql, [_idTrabajadores, _idRubro, result.url], (error, data) => {
-                                                if (!error) {
-                                                    fs.unlink(_foto, () => {
-                                                        res.status(200).send({ status: "Success", message: "Perfil actualizado", code: 200 });
-                                                    });
-                                                } else {
-                                                    res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
-                                                }
-                                            })
-                                }).catch(err => {
-                                    res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
-                                });
-                            }else {
-                                mysql.query('UPDATE trabajadores AS t JOIN rubros AS r ON r.idRubro = t.idRubro SET t.idRubro = ? WHERE t.idTrabajadores = ? ', [_idRubro, _idTrabajadores], (er, dt) => {
-                                    if(!er){
-                                        res.status(200).send({ status: "Success", message: "Rubro actualizado", code: 200 });
-                                    }else {
-                                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                                    }
-                                })
-                            }
-                        }else {
-                            res.status(400).send({ status: "Error", message: "Rubro no permitido", code: 400 });
-                        }
-                    }else{
-                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                    }
-                });
-            }else {
-                res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
-            }
-        }else {
-            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-        }
-    });
+      mysql.query(sqll, [_idTrabajadores], (err, dat) => {
+          if(!err){
+              if(dat.length != 0){
+                  mysql.query(sqlll, [_nombreRubro], (e, d) => {
+                      if(!e){
+                          if(d.length != 0){
+                              const _idRubro = d[0].idRubro;
+                              if(req.file){
+                                  const _foto = req.file.path;
+                                  cloudinary.v2.uploader.upload(_foto).then(result => {
+                                              mysql.query(sql, [_idTrabajadores, _idRubro, result.url], (error, data) => {
+                                                  if (!error) {
+                                                      fs.unlink(_foto, () => {
+                                                          res.status(200).send({ status: "Success", message: "Perfil actualizado", code: 200 });
+                                                      });
+                                                  } else {
+                                                      res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil", code: 400 });
+                                                  }
+                                              })
+                                  }).catch(err => {
+                                      res.status(400).send({ status: "Error", message: "No se pudo actulizar su foto de perfil, error de red", code: 400 });
+                                  });
+                              }else {
+                                  mysql.query('UPDATE trabajadores AS t JOIN rubros AS r ON r.idRubro = t.idRubro SET t.idRubro = ? WHERE t.idTrabajadores = ? ', [_idRubro, _idTrabajadores], (er, dt) => {
+                                      if(!er){
+                                          res.status(200).send({ status: "Success", message: "Rubro actualizado", code: 200 });
+                                      }else {
+                                          res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                                      }
+                                  })
+                              }
+                          }else {
+                              res.status(400).send({ status: "Error", message: "Rubro no permitido", code: 400 });
+                          }
+                      }else{
+                          res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                      }
+                  });
+              }else {
+                  res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+              }
+          }else {
+              res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+          }
+      });
+    }else {
+      res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
 };
 
 //ITERACION 4
@@ -255,64 +267,72 @@ trabajadorController.editar_perfil_trabajador = (req, res) => {
 //SOCKET
 };*/
 
-
+//
 trabajadorController.denunciar_solicitante = (req, res) => {
-    //const { _idSolicitudes, _descripcionDenuncia, _urlPruebas } = req.body;
-    const { _idSolicitudes, _descripcionDenuncia } = req.body;
-    const _urlPruebas = req.file.path;
-    const sql = "call SP_PUT_Denunciar(?,?,?)";
-    const sqll = "SELECT*FROM solicitudes AS s WHERE s.idSolicitudes = ?";
+    if(req.payload.id == 1){
+      const { _idSolicitudes, _descripcionDenuncia } = req.body;
+      const _urlPruebas = req.file.path;
+      const sql = "call SP_PUT_Denunciar(?,?,?)";
+      const sqll = "SELECT*FROM solicitudes AS s WHERE s.idSolicitudes = ?";
 
-    mysql.query(sqll, [_idSolicitudes], (err, dat) => {
-        if(!err){
-            if(dat.length != 0){
-                cloudinary.v2.uploader.upload(_urlPruebas).then(result => {
-                    mysql.query(sql, [_idSolicitudes, _descripcionDenuncia, result.url], (error, data) => {
-                        if (!error) {
-                            fs.unlink(_urlPruebas, () => {
-                                res.status(200).send({ status: "Success", message: "Denuncia efectuada", code: 200 });
-                            });
-                        } else {
-                            res.status(400).send({ status: "Error", message: "Denuncia no enviada", code: 400 });
-                        }
-                    });
-                }).catch(err => {
-                    res.status(400).send({ status: "Error", message: "Denuncia no enviada, error del servidor", code: 400 });
-                });
-            }else {
-                res.status(400).send({ status: "Error", message: "Solicitud de contrato no existente", code: 400 });
-            }
-        }else {
-            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-        }
-    });
+      mysql.query(sqll, [_idSolicitudes], (err, dat) => {
+          if(!err){
+              if(dat.length != 0){
+                  cloudinary.v2.uploader.upload(_urlPruebas).then(result => {
+                      mysql.query(sql, [_idSolicitudes, _descripcionDenuncia, result.url], (error, data) => {
+                          if (!error) {
+                              fs.unlink(_urlPruebas, () => {
+                                  res.status(200).send({ status: "Success", message: "Denuncia efectuada", code: 200 });
+                              });
+                          } else {
+                              res.status(400).send({ status: "Error", message: "Denuncia no enviada", code: 400 });
+                          }
+                      });
+                  }).catch(err => {
+                      res.status(400).send({ status: "Error", message: "Denuncia no enviada, error del servidor", code: 400 });
+                  });
+              }else {
+                  res.status(400).send({ status: "Error", message: "Solicitud de contrato no existente", code: 400 });
+              }
+          }else {
+              res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+          }
+      });
+    }else {
+      res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
 };
 
+//
 trabajadorController.listar_contratos_con_solicitantes = (req, res) => {
-    
-    const { _idTrabajadores } = req.body;
-    const sql = 'call SP_POST_ListarContratosConSolicitantes(?)';
-    const sqll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
+    if(req.payload.id == 1){
+      const { _idTrabajadores } = req.body;
+      const sql = 'call SP_POST_ListarContratosConSolicitantes(?)';
+      const sqll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
 
-    mysql.query(sqll, [_idTrabajadores], (err, dat) => {
-        if(!err){
-            if(dat.length != 0){
-                mysql.query(sql, [_idTrabajadores], (error, data) => {
-                    if (!error) {
-                        res.status(200).send({ status: "Success", message: data[0], code: 200 });
-                    } else {
-                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                    }
-                });
-            }else {
-                res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
-            }
-        }else {
-            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-        }
-    });
+      mysql.query(sqll, [_idTrabajadores], (err, dat) => {
+          if(!err){
+              if(dat.length != 0){
+                  mysql.query(sql, [_idTrabajadores], (error, data) => {
+                      if (!error) {
+                          res.status(200).send({ status: "Success", message: data[0], code: 200 });
+                      } else {
+                          res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                      }
+                  });
+              }else {
+                  res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+              }
+          }else {
+              res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+          }
+      });
+    }else {
+      res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
 };
 
+//PARA AMBOS Y SIN TOKEN
 trabajadorController.listar_rubros = (req, res) => {
 
     const sql = 'call SP_GET_ListarRubrosTrabajadores()';
