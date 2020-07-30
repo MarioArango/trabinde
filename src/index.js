@@ -6,7 +6,6 @@ const multer = require("multer");
 const { v4 } = require("uuid");
 const path = require("path");
 const cors = require("cors");
-const path = require('path');
 const administradorRoutes = require("./routes/administrador.routes");
 const solicitanteRoutes = require("./routes/solicitante.routes");
 const trabajadorRoutes = require("./routes/trabajador.routes");
@@ -54,15 +53,12 @@ app.use(
 
 //SETTINGS
 app.set("port", process.env.PORT || 6000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 
 //ROUTES
 app.use("/api/administrador", administradorRoutes);
 app.use("/api/solicitante", solicitanteRoutes);
 app.use("/api/trabajador", trabajadorRoutes);
-app.use("/api", require('./routes/doc.routes'))
 
 //INITIALIZATION
 const init = () => {
