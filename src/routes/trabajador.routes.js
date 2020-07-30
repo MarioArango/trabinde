@@ -23,4 +23,10 @@ router.post('/listar-contratos-con-solicitantes', verificarToken, trabajadorCont
 
 router.get('/listar-rubros', verificarToken, trabajadorController.listar_rubros);
 
+//CHAT
+/*
+router.post('/listar-contactos-solicitantes', verificarToken, trabajadorController.listar_contactos_solicitantes);
+
+router.put('/desactivar-estado-chat-trabajador', verificarToken, trabajadorController.desactivar_estado_chat_trabajador);
+*/
 module.exports = router;
