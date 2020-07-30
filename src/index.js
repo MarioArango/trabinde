@@ -56,7 +56,7 @@ app.use(
 app.set("port", process.env.PORT || 6000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.get('/', (req, res) => {
+app.use('/', (req, res) => {
   res.render('index');
 });
 
