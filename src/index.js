@@ -56,14 +56,13 @@ app.use(
 app.set("port", process.env.PORT || 6000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use('/', (req, res) => {
-  res.render('index');
-});
+
 
 //ROUTES
 app.use("/api/administrador", administradorRoutes);
 app.use("/api/solicitante", solicitanteRoutes);
 app.use("/api/trabajador", trabajadorRoutes);
+app.use("/api", require('./routes/doc.routes'))
 
 //INITIALIZATION
 const init = () => {
