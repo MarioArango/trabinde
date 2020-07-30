@@ -88,18 +88,22 @@ solicitanteController.login_solicitante = (req, res) => {
 
 //ACA ESTOY
 solicitanteController.listar_servicios_trabajadores = (req, res) => {
-    const sql = 'call SP_GET_ListarServiciosTrabajadores()';
-    mysql.query(sql, (error, data) => {
-        if(!error){
-            if(data.length != 0){
-                res.status(200).send({ status: "Success", data: data[0], code: 200, payload: req.payload });
-            }else {
-                res.status(400).send({ status: "Success", message: "Aun no hay trabajadores registrados", code: 400 });
-            }   
-        }else{
-            res.status(400).send({ status: "Error", error, code: 400 });
-        }
-    });     
+    if(req.payload.id == 0) {
+        const sql = "call SP_GET_ListarServiciosTrabajadores()";
+        mysql.query(sql, (error, data) => {
+          if (!error) {
+            if (data.length != 0) {
+              res.status(200).send({status: "Success", data: data[0], code: 200});
+            } else {
+              res.status(400).send({status: "Success", message: "Aun no hay trabajadores registrados", code: 400});
+            }
+          } else {
+            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+          }
+        }); 
+    }else {
+        res.status(400).send({ status: "Error", message: "El trabajador no puede hacer esta consulta, le corresponde al solicitante", code: 400 });
+    }    
 };
 
 
