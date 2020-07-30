@@ -67,7 +67,7 @@ solicitanteController.login_solicitante = (req, res) => {
                     if(verf){
                         mysql.query(sql, [_emailSolicitantes, passwordEncriptado], (err, data) => {
                             if (!err) {
-                                const tkn = token.signToken(data[0][0].idSolicitantes);
+                                const tkn = token.signToken(data[0][0].tipoUsuario);
                                 res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
                             }else{
                                 res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
@@ -86,7 +86,7 @@ solicitanteController.login_solicitante = (req, res) => {
     })
 };
 
-
+//ACA ESTOY
 solicitanteController.listar_servicios_trabajadores = (req, res) => {
     const sql = 'call SP_GET_ListarServiciosTrabajadores()';
     mysql.query(sql, (error, data) => {
