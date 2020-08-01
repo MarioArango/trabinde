@@ -3,11 +3,6 @@ const token = require('../util/crearToken');
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcryptjs');
 
-/*cloudinary.config({
-    cloud_name: 'drne6kexd',
-    api_key: '889385581853261',
-    api_secret: '_3Q8ijH8FhIfvf39YGnzAroj7Cs'
-})*/
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.API_KEY,

@@ -11,7 +11,6 @@ token.signToken = (id) => {
         exp: moment().add(1440, 'minute').unix() //CUANDO VA EXPIRAR EL TOKEN
         //MOMENT AÑADE TANTO TIEMPO AL TIEMPO UNIX QUE SE CREO ARRIBA
     }
-    //return jwt.sign(payload, 'a$QYgmeE$qV');
     return jwt.sign(payload, process.env.TOKEN_SECRET);
 };
 
