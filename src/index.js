@@ -1,7 +1,9 @@
-//import dotenv from 'dotenv';
-//dotenv.config();
+if(process.env.NODE_ENV === 'development'){
+  require('dotenv').config();
+  const morgan = require('morgan');
+}
+
 const express = require("express");
-//import morgan from 'morgan';
 const multer = require("multer");
 const { v4 } = require("uuid");
 const path = require("path");
@@ -31,7 +33,10 @@ app.use((req, res, next) => {
   res.header("Allow", "GET,POST,OPTIONS,PUT,DELETE");
   next();
 });
-//app.use(morgan('dev'));
+
+if(process.env.NODE_ENV === 'development'){
+  app.use(morgan('dev'));
+}
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
