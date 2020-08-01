@@ -6,7 +6,7 @@ const verificarToken = (req, res, next) => {
     try {
         if (!token)  return res.status(401).send({ status: 'Error', message: 'Token no existente', code: 401 })
            
-        const payload = jwt.verify(token, 'a$QYgmeE$qV');
+        const payload = jwt.verify(token, process.env.TOKEN_SECRET);
         req.payload = payload;
         next();
 

@@ -3,12 +3,19 @@
 const mysql = require('mysql');
 //import util from 'util';
 
-const mysqlConnection = mysql.createPool({
+/*const mysqlConnection = mysql.createPool({
     connectionLimit: 10,
     host: 'us-cdbr-east-02.cleardb.com',
     user: 'b9d3e2959e62be',
     password: 'd66d928b',
     database: 'heroku_e57934221f5d2a7'
+});*/
+const mysqlConnection = mysql.createPool({
+    connectionLimit: process.env.CONNECTIONLIMIT,
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 });
 
 /*mysqlConnection.connect(function (err) {
