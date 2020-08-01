@@ -1,6 +1,6 @@
 if(process.env.NODE_ENV === 'development'){
   require('dotenv').config();
-  const morgan = require('morgan');
+  var morgan = require('morgan');
 }
 
 const express = require("express");
