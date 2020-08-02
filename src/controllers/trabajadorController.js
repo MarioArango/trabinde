@@ -21,12 +21,12 @@ trabajadorController.registro_trabajador = (req, res) => {
     const _foto = req.file.path;
     
     const sql = 'call SP_POST_RegistroTrabajador(?,?,?,?,?,?,?,?,?)';
-
+    
     mysql.query('SELECT*FROM trabajadores WHERE emailTrabajadores = ?', [_emailTrabajadores], (er, dt) => {
-        if(!er){
+        if (!er) {
             if (dt[0] == undefined) {
                 mysql.query('SELECT*FROM persona AS p WHERE p.dni = ?', [_dni], (error, data) => {
-                    if(!error){
+                    if (!error) {
                         if (data[0] == undefined) {
 
                             bcrypt.genSalt(10, (err, salt) => {
@@ -44,24 +44,24 @@ trabajadorController.registro_trabajador = (req, res) => {
                                         });
                                     }).catch(error => {
                                         res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                                    })      
+                                    })
                                 })
                             })
-                            
+
                         } else {
                             res.status(400).send({ status: "Error", message: "DNI en uso", code: 400 });
                         }
-                    }else{
+                    } else {
                         res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                     }
                 })
             } else {
                 res.status(400).send({ status: "Error", message: "Email en uso", code: 400 });
             }
-        }else{
+        } else {
             res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
         }
-    })
+    });
 };
 
 
@@ -348,6 +348,57 @@ trabajadorController.listar_rubros = (req, res) => {
         }
     });
 }
+
+//CAMBIAR CONTRASEÑA
+trabajadorController.cambiar_contrasenia_trabajador = (req, res) => {
+    if (req.payload.id == 1) {
+        const { _dni, _emailTrabajadores, _password, _nuevaContrasenia } = req.body;
+        const sql = "call SP_PUT_CambiarContraseniaTrabajador(?, ?)";
+        const sqll = "SELECT*FROM persona AS p WHERE p.dni = ?";
+        const sqlll = "SELECT*FROM trabajadores AS t WHERE t.idPersona = ? AND t.emailTrabajadores = ?";
+        mysql.query(sqll, [_dni], (error, data) => {
+            if (!error) {
+                if (data.length != 0) {
+                    const _idPersona = data[0].idPersona;
+                    mysql.query(sqlll, [_idPersona, _emailTrabajadores], (err, dat) => {
+                        if (!err) {
+                            if (dat.length != 0) {
+                                const _passwordEncriptado = dat[0].password;
+                                bcrypt.compare(_password, _passwordEncriptado).then(verf => {
+                                    if (verf) {
+                                        bcrypt.genSalt(10, (err, salt) => {
+                                            bcrypt.hash(_nuevaContrasenia, salt, (err, passwordEncriptado) => {
+                                                mysql.query(sql, [_emailTrabajadores, passwordEncriptado], (e, dt) => {
+                                                    if (!e) {
+                                                        res.status(200).send({ status: "Success", message: "Contraseña modificada", code: 200 });
+                                                    } else {
+                                                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    } else {
+                                        res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
+                                    }
+                                }).catch(e => res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 }));
+                            } else {
+                                res.status(400).send({ status: "Error", message: "Email no corresponde al DNI registrado", code: 400 });
+                            }
+                        } else {
+                            res.status(400).send({ status: "Error", message: "Error de conexionnnnnn", code: 400 });
+                        }
+                    });
+                } else {
+                    res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+                }
+            } else {
+                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+            }
+        });
+    }else {
+        res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
+};
 
 //CHAT 
 /*

@@ -74,8 +74,8 @@ const init = () => {
 }
 
 init();
-
-/*const server = app.listen(app.get("port"), () => {
+/*
+const server = app.listen(app.get("port"), () => {
   console.log(`Conectado al servidor en el puerto ${app.get("port")}`);
 });
 
@@ -114,6 +114,8 @@ if(espacioIdSolicitante != ''){
                     //ESTE EVENTO ES PARA QUE LA NOTIFICACION SE ACTIVE EN LA PRIMERA VEZ QUE SE ENVIA UN MENSAJE Y CAMBIA DE 0 A 1 EL estadoChat
                     //ESTE EVENTO CORRESPENDO A LA CAMPANA O NOTIFICACION
                     //EL FRONT SE UNE A ESTE ESPACIO Y OYE ESTE EVENTO
+                    //EL YA ESTA EN EL ESPACIO Y EN EL FROMT YA TIENE EL IDSol asi que si
+                    //se podra conectar y unir y escuchar este evento
                     socket.emit('nuevo-mensaje-trabajador', { mensaje: 'nuevo mensaje' });
 
                 } else {
@@ -123,7 +125,7 @@ if(espacioIdSolicitante != ''){
         });
 
         //TRABAJADOR
-        //HABRE EL CHAT DEBE UNIRSE AL ESPACIO Y LA SALA, YA SE UNIO AL ESPACIO
+        //ABRE EL CHAT DEBE UNIRSE AL ESPACIO Y LA SALA, YA SE UNIO AL ESPACIO
         socket.on('ver-mensaje-solicitante', (data) => {
 
             const { idSolicitantes, idTrabajadores } = data;
@@ -138,9 +140,8 @@ if(espacioIdSolicitante != ''){
                     idTrabajadores, mensaje
                 });
                 //EMITE EVENTO DE NOTIFICACION
-                socket.emit('nuevo-mensaje-solicitante', {
-                    mensaje: 'nuevo mensaje'
-                });
+                //El solicitante al tener su id podra escuchar
+                socket.emit('nuevo-mensaje-solicitante', { mensaje: 'nuevo mensaje'});
             });
         });
     });
