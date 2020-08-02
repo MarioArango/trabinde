@@ -73,6 +73,25 @@ administradorController.listar_trabajadores_por_distrito = (req, res) => {
     } 
 };
 
+administradorController.listar_trabajadores_con_denuncia = (req, res) => {
+    if(req.payload.id == 2){
+        const sql = "call SP_GET_ListarTrabajadoresConDenuncia()";
+        mysql.query(sql, (error, data) => {
+            if (!error) {
+                if (data[0].idPersona == null) {
+                    res.status(400).send({ status: "Success", message: "No hay trabajadores con denuncias", code: 400 });
+                } else {
+                    res.status(200).send({ status: "Success", data: data[0], code: 200 });
+                }
+            } else {
+                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+            }
+        });
+    }else {
+        res.status(400).send({ status: "Error", message: "Permiso solo para el administrador", code: 400 })
+    }
+};
+
 administradorController.listar_solicitantes = (req, res) => {
     if (req.payload.id == 2){
         const sql = 'call SP_GET_AdministradorListarSolicitantes()';
@@ -110,6 +129,25 @@ administradorController.listar_solicitantes_por_distrito = (req, res) => {
         });
     }else {
         res.status(400).send({ status: "Error", message: "Permiso solo para el administrador", code: 400 });
+    }
+};
+
+administradorController.listar_solicitantes_con_denuncia = (req, res) => {
+    if (req.payload.id == 2) {
+        const sql = "call SP_GET_ListarSolicitantesConDenuncia()";
+        mysql.query(sql, (error, data) => {
+            if (!error) {
+                if (data[0].idPersona == null) {
+                    res.status(400).send({ status: "Success", message: "No hay solicitantes con denuncias", code: 400 });
+                } else {
+                    res.status(200).send({ status: "Success", data: data[0], code: 200 });
+                }
+            } else {
+                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+            }
+        });
+    } else {
+        res.status(400).send({ status: "Error", message: "Permiso solo para el administrador", code: 400 })
     }
 };
 
@@ -182,6 +220,7 @@ administradorController.deshabilitar_habilitar_trabajador = (req, res) => {
 
 //ITERACION 4
 //FOTO
+/*
 administradorController.numero_denuncias_solicitante = (req, res) => {
     if (req.payload.id == 2){
         const { _idSolicitantes } = req.body;
@@ -208,8 +247,9 @@ administradorController.numero_denuncias_solicitante = (req, res) => {
     }else {
         res.status(400).send({ status: "Error", message: "Permiso solo para el administrador", code: 400 });
     }
-};
+};*/
 
+/*
 administradorController.numero_denuncias_trabajador = (req, res) => {
     if (req.payload.id == 2){
         const { _idTrabajadores } = req.body;
@@ -237,6 +277,7 @@ administradorController.numero_denuncias_trabajador = (req, res) => {
         res.status(400).send({ status: "Error", message: "Permiso solo para el administrador", code: 400 });
     }
 };
+*/
 
 administradorController.listar_denuncias_a_solicitantes = (req, res) => {
     if (req.payload.id == 2){
