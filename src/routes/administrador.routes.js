@@ -22,8 +22,8 @@ router.put('/deshabilitar-habilitar-trabajador', verificarToken, administradorCo
 
 //ITERACION 4
 
-router.post('/numero-denuncias-solicitante', administradorController.numero_denuncias_solicitante);
-router.post('/numero-denuncias-trabajador', administradorController.numero_denuncias_trabajador);
+router.post('/numero-denuncias-solicitante', verificarToken,administradorController.numero_denuncias_solicitante);
+router.post('/numero-denuncias-trabajador', verificarToken, administradorController.numero_denuncias_trabajador);
 router.post('/listar-denuncias-a-solicitantes', verificarToken, administradorController.listar_denuncias_a_solicitantes);
 router.post('/listar-denuncias-a-trabajadores', verificarToken, administradorController.listar_denuncias_a_trabajadores);
 
