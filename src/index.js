@@ -110,14 +110,21 @@ const io = SocketIO.listen(server);
 const mysql = require('./database');
 
 
-//INICIAR CHAT ENVIANDO EL IDSOLICITANTE PARA CREAR UN ESPACIO
-var espacioIdSolicitante = '';
-app.post('/empezar-chat', (req, res) => {
-    const { idSolicitantes } = req.body;
-    espacioIdSolicitante = idSolicitantes;
-    res.json('ok');
+io.on('connection', (socket) => {
+  //cuando el solicitante hace click en enviar
+  socket.on('mensaje', data => {//idS, nombreEmisor, msnS, idT
+
+    const { _idSolicitantes, _idTrabajadores, _mensaje, _nombre } = data;
+
+    socket.join(`/${_idSolicitantes}/${_idTrabajadores}`);
+
+    socket.emit('mensaje-usuario', { _idSolicitantes, _idTrabajadores, _mensaje, _nombre });
+
+  });
 });
 
+
+/*
 //SOCKET
 //ESCUCHO AL ESPACIO DONDE TE CONECTASTE DEFINIDO POR EL idSolicitantes
 if(espacioIdSolicitante != ''){
@@ -171,4 +178,4 @@ if(espacioIdSolicitante != ''){
             });
         });
     });
-}
+}*/
