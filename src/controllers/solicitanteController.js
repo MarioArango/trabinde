@@ -322,7 +322,7 @@ solicitanteController.cambiar_contrasenia_solicitante = (req, res) => {
 };
 
 //CHAT 
-/*solicitanteController.listar_contactos_trabajadores = (req, res) => {
+solicitanteController.listar_contactos_trabajadores = (req, res) => {
 
     if(req.payload.id == 0){
         const {_idSolicitantes} = req.body;
@@ -389,6 +389,6 @@ solicitanteController.desactivar_estado_chat_solicitante = (req, res) => {
     }else {
         res.status(400).send({ status: "Error", message: "El trabajador no puede hacer esta consulta, le corresponde al solicitante", code: 400 });
     }
-};*/
+};
 
 module.exports = solicitanteController;

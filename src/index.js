@@ -23,6 +23,7 @@ const storage = multer.diskStorage({
 
 //MIDDLEWARES
 app.use(cors({ exposedHeaders: ["auth-token"] }));
+/*
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -33,6 +34,18 @@ app.use((req, res, next) => {
   res.header("Allow", "GET,POST,OPTIONS,PUT,DELETE");
   next();
 });
+*/
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method,');
+  res.header('content-type: application/json; charset=utf-8')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+  next()
+})
+
+
 
 if(process.env.NODE_ENV === 'development'){
   app.use(morgan('dev'));
@@ -74,10 +87,14 @@ const init = () => {
 }
 
 init();
+
+
 /*
+
 const server = app.listen(app.get("port"), () => {
   console.log(`Conectado al servidor en el puerto ${app.get("port")}`);
 });
+
 
 const SocketIO = require('socket.io'); 
 const io = SocketIO.listen(server);
@@ -128,9 +145,9 @@ if(espacioIdSolicitante != ''){
         //ABRE EL CHAT DEBE UNIRSE AL ESPACIO Y LA SALA, YA SE UNIO AL ESPACIO
         socket.on('ver-mensaje-solicitante', (data) => {
 
-            const { idSolicitantes, idTrabajadores } = data;
+            const { _idSolicitantes, _idTrabajadores } = data;
             //SE UNE
-            socket.join(idTrabajadores);
+            socket.join(_idTrabajadores);
             //CUANDO HACE CLICK EL TRABAJADOR EN ENVIAR, EMITE A ESTE ESPACIO Y SALA ESOS DATOS
             socket.on('mensaje-trabajador', (dat) => {
 

@@ -401,7 +401,7 @@ trabajadorController.cambiar_contrasenia_trabajador = (req, res) => {
 };
 
 //CHAT 
-/*
+
 trabajadorController.listar_contactos_solicitantes = (req, res) => {
 
     const { _idTrabajadores } = req.body;
@@ -462,6 +462,5 @@ trabajadorController.desactivar_estado_chat_trabajador = (req, res) => {
         }
     });
 };
-*/
 
 module.exports = trabajadorController;
