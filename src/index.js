@@ -23,7 +23,8 @@ const storage = multer.diskStorage({
 
 //MIDDLEWARES
 app.use(cors({ exposedHeaders: ["auth-token"] }));
-/*
+
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -34,7 +35,7 @@ app.use((req, res, next) => {
   res.header("Allow", "GET,POST,OPTIONS,PUT,DELETE");
   next();
 });
-*/
+
 
 /*app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8100');
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
   next();
 });*/
 
+/*
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:8100/');
   res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method,');
@@ -52,7 +54,7 @@ app.use((req, res, next) => {
   res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next()
-})
+})/*
 
 
 
