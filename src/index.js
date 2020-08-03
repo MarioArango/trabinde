@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 });*/
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:8100');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8100'|| 'http://localhost:8101');
   res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method,');
   res.header('content-type: application/json; charset=utf-8')
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -120,7 +120,6 @@ io.on('connection', (socket) => {
     socket.join(`/${_idSolicitantes}/${_idTrabajadores}`);
 
     socket.emit('mensaje-usuario', { _idSolicitantes, _idTrabajadores, _mensaje, _nombre });
-
   });
 });
 
