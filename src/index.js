@@ -114,6 +114,7 @@ io.on('connection', (socket) => {
   //cuando el solicitante hace click en enviar
   socket.on('mensaje', data => {//idS, nombreEmisor, msnS, idT
 
+    console.log(data);
     const { _idSolicitantes, _idTrabajadores, _mensaje, _nombre } = data;
 
     socket.join(`/${_idSolicitantes}/${_idTrabajadores}`);
