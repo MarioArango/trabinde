@@ -54,7 +54,7 @@ app.use((req, res, next) => {
   res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next()
-})/*
+})*/
 
 
 
