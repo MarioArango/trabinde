@@ -403,64 +403,108 @@ trabajadorController.cambiar_contrasenia_trabajador = (req, res) => {
 //CHAT 
 
 trabajadorController.listar_contactos_solicitantes = (req, res) => {
+    if (req.payload.id == 1) {
+        const { _idTrabajadores } = req.body;
+        const sql = 'call SP_POST_ListarContactosSolicitantes(?)';
+        const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
 
-    const { _idTrabajadores } = req.body;
-    const sql = 'call SP_POST_ListarContactosSolicitantes(?)';
-    const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
-
-    mysql(sqll, [_idTrabajadores], (erro, dat) => {
-        if (!erro) {
-            if (dat.length != 0) {
-                mysql.query(sql, [_idTrabajadores], (error, data) => {
-                    if (!error) {
-                        if (data.length != 0) {
-                            res.status(200).send({ status: "Success", message: data[0], code: 200 });
+        mysql(sqll, [_idTrabajadores], (erro, dat) => {
+            if (!erro) {
+                if (dat.length != 0) {
+                    mysql.query(sql, [_idTrabajadores], (error, data) => {
+                        if (!error) {
+                            if (data.length != 0) {
+                                res.status(200).send({ status: "Success", message: data[0], code: 200 });
+                            } else {
+                                res.status(400).send({ status: "Error", message: "No hay contactos", code: 400 });
+                            }
                         } else {
-                            res.status(400).send({ status: "Error", message: "No hay contactos", code: 400 });
+                            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                         }
-                    } else {
-                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                    }
-                });
+                    });
+                } else {
+                    res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+                }
             } else {
-                res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
             }
-        } else {
-            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-        }
-    });
+        });
+    }else {
+        res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
 };
 
 trabajadorController.desactivar_estado_chat_trabajador = (req, res) => {
+    if (req.payload.id == 1){
+        const { _idTrabajadores } = req.body;
+        const sql = 'call SP_PUT_DesactivarEstadoChatTrabajador(?)';
+        const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
+        const sqlll = 'SELECT*FROM chat AS ch WHERE ch.idTrabajadores = ?';
 
-    const { _idTrabajadores } = req.body;
-    const sql = 'call SP_PUT_DesactivarEstadoChatTrabajador(?)';
-    const sqll = 'SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?';
-    const sqlll = 'SELECT*FROM chat AS ch WHERE ch.idTrabajadores = ?';
-
-    mysql.query(sqll, [_idTrabajadores], (erro, dat) => {
-        if (!erro) {
-            if (dat.length != 0) {
-                mysql.query(sqlll, [_idTrabajadores], (er, dt) => {
-                    if (dt[0].estadoChat = 0) {
-                        res.status(400).send({ status: "Error", message: "El estado estaba deshabilitado", code: 400 });
-                    } else {
-                        mysql.query(sql, [_idTrabajadores], (error, data) => {
-                            if (!error) {
-                                res.status(200).send({ status: "Success", message: 'El estado fue deshabilitado', code: 200 });
-                            } else {
-                                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                            }
-                        });
-                    }
-                });
+        mysql.query(sqll, [_idTrabajadores], (erro, dat) => {
+            if (!erro) {
+                if (dat.length != 0) {
+                    mysql.query(sqlll, [_idTrabajadores], (er, dt) => {
+                        if (dt[0].estadoChat = 0) {
+                            res.status(400).send({ status: "Error", message: "El estado estaba deshabilitado", code: 400 });
+                        } else {
+                            mysql.query(sql, [_idTrabajadores], (error, data) => {
+                                if (!error) {
+                                    res.status(200).send({ status: "Success", message: 'El estado fue deshabilitado', code: 200 });
+                                } else {
+                                    res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+                }
             } else {
-                res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
             }
-        } else {
-            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-        }
-    });
+        });
+    }else {
+        res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
+};
+
+trabajadorController.nuevo_contrato = (req, res) => {
+    if (req.payload.id == 1) {
+        const { _idSolicitantes, _idTrabajadores } = req.body;
+        const sql = "call SP_POST_NuevoContrato(?,?)";
+        const sqll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
+        const sqlll = "SELECT*FROM trabajadores AS t WHERE t.idTrabajadores = ?";
+        mysql.query(sqll, [_idTrabajadores], (error, data) => {
+            if(!error){
+                if(data.length != 0){
+                    mysql.query(sqlll, [_idSolicitantes], (erro, dat) => {
+                        if(!erro){
+                            if(dat.length != 0){
+                                mysql.query(sql, [_idSolicitantes, _idTrabajadores], (e, d) => {
+                                    if(!e){
+                                        res.status(200).send({ status: "Success", message: 'Contrato establecido', code: 200 });
+                                    }else {
+                                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 }); 
+                                    }
+                                })
+                            }else {
+                                res.status(400).send({ status: "Error", message: "Solicitante no registrado", code: 400 });
+                            }
+                        }else {
+                            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 }); 
+                        }
+                    });
+                }else{
+                    res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
+                }
+            }else {
+                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });     
+            }
+        });
+    }else {
+        res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
 };
 
 module.exports = trabajadorController;

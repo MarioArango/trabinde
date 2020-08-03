@@ -31,4 +31,7 @@ router.post('/listar-contactos-solicitantes', verificarToken, trabajadorControll
 
 router.put('/desactivar-estado-chat-trabajador', verificarToken, trabajadorController.desactivar_estado_chat_trabajador);
 */
+router.post('/nuevo-contrato', verificarToken, trabajadorController.nuevo_contrato);
+
+
 module.exports = router;

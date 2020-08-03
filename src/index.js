@@ -121,8 +121,58 @@ io.on('connection', (socket) => {
 
     socket.join(`/${_idSolicitantes}/${_idTrabajadores}`);
 
+    //en el front del trab validad si su idT es igual al que te envio y ahi pintas
+    //lo mismo para el solicitante
     socket.emit('mensaje-usuario', { _idSolicitantes, _idTrabajadores, _mensaje, _nombre });
+
+    const sql = 'call SP_POST_ActivarEstadoChatPorSolicitante(?,?)';
+    const sqll = "SELECT*FROM solicitudes AS s WHERE s.idSolicitantes = ? AND s.idTrabajadores = ?";
+    const sqlll = "call SP_PUT_VolverActivarEstadoChatCreadoPorSolicitante(?,?)";
+
+    mysql.query(sqll, [_idSolicitantes, _idTrabajadores], (erro, dat) => {
+      if(!erro){
+        if(dat[0].estadoChat == 1){
+          console.log('El chat fue creado con anterioridad');
+        }else if(dat[0].idSolicitudes && dat[0].estadoChat == 0){
+          mysql.query(sqlll, [_idSolicitantes, _idTrabajadores], (error, data) => {
+            if (!error) {
+              //en el front del trab validad si su idT es igual al que te envio y ahi pintas
+              //lo mismo para el solicitante
+              socket.emit('notificacion', { _idSolicitantes, _idTrabajadores });
+
+            } else {
+              console.log('Error de conexion');
+            }
+          });
+        }else {
+          mysql.query(sql, [_idSolicitantes, _idTrabajadores], (error, data) => {
+            if (!error) {
+              //en el front del trab validad si su idT es igual al que te envio y ahi pintas
+              //lo mismo para el solicitante
+              socket.emit('notificacion', { _idSolicitantes, _idTrabajadores });
+
+            } else {
+              console.log('Error de conexion');
+            }
+          });
+        }
+      }else {
+        console.log('Error de conexion');
+      }
+    });
   });
+
+  socket.on('contrato', data => {
+    const { _idSolicitantes, _idTrabajadores } = data;
+
+    socket.join(`/${_idTrabajadores}/${_idSolicitantes}`);
+
+    //en el front del trab validad si su idT es igual al que te envio y ahi pintas
+    socket.emit('nuevo-contrato', { _idSolicitantes, _idTrabajadores});
+
+  });
+
+
 });
 
 
