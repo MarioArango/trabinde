@@ -26,11 +26,11 @@ router.get('/listar-rubros', trabajadorController.listar_rubros);
 router.put('/cambiar-contrasenia-trabajador',verificarToken, trabajadorController.cambiar_contrasenia_trabajador);
 
 //CHAT
-/*
+
 router.post('/listar-contactos-solicitantes', verificarToken, trabajadorController.listar_contactos_solicitantes);
 
 router.put('/desactivar-estado-chat-trabajador', verificarToken, trabajadorController.desactivar_estado_chat_trabajador);
-*/
+
 router.post('/nuevo-contrato', verificarToken, trabajadorController.nuevo_contrato);
 
 
