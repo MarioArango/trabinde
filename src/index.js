@@ -91,17 +91,16 @@ app.use("/api/solicitante", solicitanteRoutes);
 app.use("/api/trabajador", trabajadorRoutes);
 
 //INITIALIZATION
-/*const init = () => {
+const init = () => {
   app.listen(app.get("port"), () => {
   console.log(`Conectado al servidor en el puerto ${app.get("port")}`);
   });
 }
 
-init();
-*/
+init()
 
 
-
+/*
 const server = app.listen(app.get("port"), () => {
   console.log(`Conectado al servidor en el puerto ${app.get("port")}`);
 });
@@ -176,7 +175,7 @@ io.on('connection', (socket) => {
 });
 
 
-/*
+
 //SOCKET
 //ESCUCHO AL ESPACIO DONDE TE CONECTASTE DEFINIDO POR EL idSolicitantes
 if(espacioIdSolicitante != ''){
