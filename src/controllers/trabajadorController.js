@@ -351,7 +351,6 @@ trabajadorController.listar_rubros = (req, res) => {
 
 //CAMBIAR CONTRASEÑA
 trabajadorController.cambiar_contrasenia_trabajador = (req, res) => {
-    if (req.payload.id == 1) {
         const { _dni, _emailTrabajadores, _password, _nuevaContrasenia } = req.body;
         const sql = "call SP_PUT_CambiarContraseniaTrabajador(?, ?)";
         const sqll = "SELECT*FROM persona AS p WHERE p.dni = ?";
@@ -395,9 +394,6 @@ trabajadorController.cambiar_contrasenia_trabajador = (req, res) => {
                 res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
             }
         });
-    }else {
-        res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
-    }
 };
 
 trabajadorController.recuperar_contrasenia = (req, res) => {
