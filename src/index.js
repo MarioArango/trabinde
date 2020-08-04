@@ -165,6 +165,7 @@ io.on('connection', (socket) => {
   socket.on('contrato', data => {
     const { _idSolicitantes, _idTrabajadores } = data;
 
+    console.log(data)
     socket.join(`/${_idTrabajadores}/${_idSolicitantes}`);
 
     //en el front del trab validad si su idT es igual al que te envio y ahi pintas
