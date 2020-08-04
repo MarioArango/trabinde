@@ -351,6 +351,7 @@ trabajadorController.listar_rubros = (req, res) => {
 
 //CAMBIAR CONTRASEÑA
 trabajadorController.cambiar_contrasenia_trabajador = (req, res) => {
+    if(req.payload.id == 1) {
         const { _dni, _emailTrabajadores, _password, _nuevaContrasenia } = req.body;
         const sql = "call SP_PUT_CambiarContraseniaTrabajador(?, ?)";
         const sqll = "SELECT*FROM persona AS p WHERE p.dni = ?";
@@ -394,17 +395,27 @@ trabajadorController.cambiar_contrasenia_trabajador = (req, res) => {
                 res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
             }
         });
+    }else {
+        res.status(400).send({ status: "Error", message: "El solicitante no puede hacer esta consulta, le corresponde al trabajador", code: 400 });
+    }
 };
 
 trabajadorController.recuperar_contrasenia = (req, res) => {
-    const { _dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _telefono, _emailTrabajadores } = req.body;
+    const { _dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _telefono, _emailTrabajadores, _nuevaContrasenia } = req.body;
     const sql = 'call SP_POST_VerificarDatosRecuperarContraseniaTrabajador(?,?,?,?,?,?,?)';
+    const sqll = 'call SP_PUT_ActualizarSimpleContraseniaTrabajadores(?,?)';
 
     mysql.query(sql, [_dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _telefono, _emailTrabajadores], (error, data) => {
         if (!error) {
-            if (data[0].length != 0) {
-                res.status(200).send({ status: "Success", message: "OK, Datos correctos", code: 200 });
-            } else {
+            if(data[0].length != 0){
+                mysql.query(sqll, [_dni, _nuevaContrasenia], (err, dat) => {
+                    if(!err){
+                        res.status(200).send({ status: "Success", message: "OK, Contraseña modificada", code: 200 });
+                    }else {
+                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                    }
+                });
+            }else {
                 res.status(400).send({ status: "Error", message: "Trabajador no registrado", code: 400 });
             }
         } else {

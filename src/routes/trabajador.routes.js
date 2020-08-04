@@ -23,9 +23,9 @@ router.post('/listar-contratos-con-solicitantes', verificarToken, trabajadorCont
 
 router.get('/listar-rubros', trabajadorController.listar_rubros);
 
-router.put('/cambiar-contrasenia-trabajador', trabajadorController.cambiar_contrasenia_trabajador);
+router.put('/cambiar-contrasenia-trabajador', verificarToken, trabajadorController.cambiar_contrasenia_trabajador);
 
-router.post('/recuperar-contrasenia', trabajadorController.recuperar_contrasenia);
+router.put('/recuperar-contrasenia', trabajadorController.recuperar_contrasenia);
 
 //CHAT
 

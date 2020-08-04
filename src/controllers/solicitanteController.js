@@ -272,17 +272,18 @@ solicitanteController.listar_contratos_con_trabajadores = (req, res) => {
 
 //CAMBIAR CONTRASEÑA
 solicitanteController.cambiar_contrasenia_solicitante = (req, res) => {
+    if (req.payload.id == 0){
         const { _dni, _emailSolicitantes, _password, _nuevaContrasenia } = req.body;
         const sql = "call SP_PUT_CambiarContraseniaSolicitante(?, ?)";
         const sqll = "SELECT*FROM persona AS p WHERE p.dni = ?";
         const sqlll = "SELECT*FROM solicitantes AS s WHERE s.idPersona = ? AND s.emailSolicitantes = ?";
         mysql.query(sqll, [_dni], (error, data) => {
-            if(!error){
-                if(data.length != 0){
+            if (!error) {
+                if (data.length != 0) {
                     const _idPersona = data[0].idPersona;
                     mysql.query(sqlll, [_idPersona, _emailSolicitantes], (err, dat) => {
-                        if(!err){
-                            if(dat.length != 0){
+                        if (!err) {
+                            if (dat.length != 0) {
                                 const _passwordEncriptado = dat[0].password;
                                 bcrypt.compare(_password, _passwordEncriptado).then(verf => {
                                     if (verf) {
@@ -301,35 +302,45 @@ solicitanteController.cambiar_contrasenia_solicitante = (req, res) => {
                                         res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
                                     }
                                 }).catch(e => res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 }));
-                            }else {
+                            } else {
                                 res.status(400).send({ status: "Error", message: "Email no corresponde al DNI registrado", code: 400 });
                             }
-                        }else {
+                        } else {
                             res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
                         }
                     });
-                }else {
+                } else {
                     res.status(400).send({ status: "Error", message: "Solicitante no registrado", code: 400 });
                 }
-            }else {
+            } else {
                 res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
             }
         });
+    }else {
+        res.status(400).send({ status: "Error", message: "El trabajador no puede hacer esta consulta, le corresponde al solicitante", code: 400 });
+    }
 };
 //
 solicitanteController.recuperar_contrasenia = (req, res) => {
-    const { _dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _emailSolicitantes } = req.body;
+    const { _dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _emailSolicitantes, _nuevaContrasenia } = req.body;
     const sql = 'call SP_POST_VerificarDatosRecuperarContraseniaSolicitante(?,?,?,?,?,?)';
+    const sqll = 'call SP_PUT_ActualizarSimpleContraseniaSolicitantes(?,?)';
 
     mysql.query(sql, [_dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _emailSolicitantes], (error, data) => {
         if (!error) {
             if (data[0].length != 0) {
-                res.status(200).send({ status: "Success", message: "OK, Datos correctos", code: 200 });
+                mysql.query(sqll, [_dni, _nuevaContrasenia], (err, dat) => {
+                    if (!err) {
+                        res.status(200).send({ status: "Success", message: "OK, Contraseña modificada", code: 200 });
+                    } else {
+                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                    }
+                })
             } else {
                 res.status(400).send({ status: "Error", message: "Solicitante no registrado", code: 400 });
             }
         } else {
-            res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+            res.status(400).send({ status: "Error", message: "Error de sssonexion", code: 400 });
         }
     });
 };
