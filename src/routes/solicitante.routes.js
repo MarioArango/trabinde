@@ -25,6 +25,8 @@ router.post('/listar-contratos-con-trabajadores', verificarToken, solicitanteCon
 
 router.put('/cambiar-contrasenia-solicitante', verificarToken, solicitanteController.cambiar_contrasenia_solicitante);
 
+router.post('/recuperar-contrasenia', solicitanteController.recuperar_contrasenia);
+
 //CHAT
 
 router.post('/listar-contactos-trabajadores', verificarToken, solicitanteController.listar_contactos_trabajadores);

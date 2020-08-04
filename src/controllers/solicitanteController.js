@@ -320,6 +320,27 @@ solicitanteController.cambiar_contrasenia_solicitante = (req, res) => {
         res.status(400).send({ status: "Error", message: "El trabajador no puede hacer esta consulta, le corresponde al solicitante", code: 400 });
     }
 };
+//
+solicitanteController.recuperar_contrasenia = (req, res) => {
+    if (req.payload.id == 0) {
+        const { _dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _emailSolicitantes } = req.body;
+        const sql = 'call SP_POST_VerificarDatosRecuperarContraseniaSolicitante(?,?,?,?,?,?)';
+
+        mysql.query(sql, [_dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _emailSolicitantes], (error, data) => {
+            if (!error) {
+                if (data.length != 0) {
+                    res.status(200).send({ status: "Success", message: "Datos incorrectors", code: 200 });
+                } else {
+                    res.status(400).send({ status: "Error", message: "Solicitante no registrado", code: 400 });
+                }
+            } else {
+                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+            }
+        });
+    } else {
+        res.status(400).send({ status: "Error", message: "El trabajador no puede hacer esta consulta, le corresponde al solicitante", code: 400 });
+    }
+};
 
 //CHAT 
 solicitanteController.listar_contactos_trabajadores = (req, res) => {
