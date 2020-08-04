@@ -329,13 +329,17 @@ solicitanteController.recuperar_contrasenia = (req, res) => {
     mysql.query(sql, [_dni, _nombre, _apellidoPaterno, _apellidoMaterno, _distrito, _emailSolicitantes], (error, data) => {
         if (!error) {
             if (data[0].length != 0) {
-                mysql.query(sqll, [_dni, _nuevaContrasenia], (err, dat) => {
-                    if (!err) {
-                        res.status(200).send({ status: "Success", message: "OK, Contraseña modificada", code: 200 });
-                    } else {
-                        res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                    }
-                })
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(_nuevaContrasenia, salt, (err, passwordEncriptado) => {
+                        mysql.query(sqll, [_dni, passwordEncriptado], (e, dt) => {
+                            if (!e) {
+                                res.status(200).send({ status: "Success", message: "Contraseña modificada", code: 200 });
+                            } else {
+                                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                            }
+                        });
+                    });
+                });
             } else {
                 res.status(400).send({ status: "Error", message: "Solicitante no registrado", code: 400 });
             }
