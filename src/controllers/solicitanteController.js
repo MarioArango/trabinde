@@ -59,7 +59,7 @@ solicitanteController.registro_solicitante = (req, res) => {
 solicitanteController.login_solicitante = (req, res) => {
     const { _emailSolicitantes, _password } = req.body;
     const sql = 'call SP_POST_LoginSolicitante(?, ?)';
-    const sql2 = 'SELECT s.emailSolicitantes, s.password FROM solicitantes AS s WHERE s.emailSolicitantes = ?';
+    const sql2 = 'SELECT s.emailSolicitantes, s.password, s.estadoUsuario FROM solicitantes AS s WHERE s.emailSolicitantes = ?';
     
     mysql.query(sql2, [_emailSolicitantes], (error, dat) => {
         if (!error){
@@ -81,7 +81,7 @@ solicitanteController.login_solicitante = (req, res) => {
                         }
                     });
                 }else {
-                    res.status(400).send({ status: "Error", message: "Solicitante deshabilido", code: 400 });
+                    res.status(400).send({ status: "Error", message: "Solicitante deshabilitado", code: 400 });
                 }  
             }else{
                 res.status(400).send({ status: "Error", message: "Email no existente", code: 400 });
