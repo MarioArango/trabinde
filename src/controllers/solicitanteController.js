@@ -64,21 +64,25 @@ solicitanteController.login_solicitante = (req, res) => {
     mysql.query(sql2, [_emailSolicitantes], (error, dat) => {
         if (!error){
             if(dat.length != 0){
-                const passwordEncriptado = dat[0].password;
-                bcrypt.compare(_password, passwordEncriptado).then(verf => {
-                    if(verf){
-                        mysql.query(sql, [_emailSolicitantes, passwordEncriptado], (err, data) => {
-                            if (!err) {
-                                const tkn = token.signToken(data[0][0].tipoUsuario);
-                                res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
-                            }else{
-                                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                            }
+                if (dat[0].estadoUsuario == 1){
+                    const passwordEncriptado = dat[0].password;
+                    bcrypt.compare(_password, passwordEncriptado).then(verf => {
+                        if (verf) {
+                            mysql.query(sql, [_emailSolicitantes, passwordEncriptado], (err, data) => {
+                                if (!err) {
+                                    const tkn = token.signToken(data[0][0].tipoUsuario);
+                                    res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
+                                } else {
+                                    res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                                }
+                            });
+                        } else {
+                            res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
+                        }
                     });
-                    }else {
-                        res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
-                    }
-                });  
+                }else {
+                    res.status(400).send({ status: "Error", message: "Solicitante deshabilido", code: 400 });
+                }  
             }else{
                 res.status(400).send({ status: "Error", message: "Email no existente", code: 400 });
             }

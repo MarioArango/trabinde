@@ -70,26 +70,30 @@ trabajadorController.login_trabajador = (req, res) => {
      
     const sql = 'call SP_POST_LoginTrabajador(?, ?)';
 
-    const sql2 = 'SELECT t.emailTrabajadores, t.password FROM trabajadores AS t WHERE t.emailTrabajadores = ?';
+    const sql2 = 'SELECT t.emailTrabajadores, t.password, t.estadoUsuario FROM trabajadores AS t WHERE t.emailTrabajadores = ?';
 
     mysql.query(sql2, [_emailTrabajadores], (error, dat) => {
         if (!error) {
             if (dat.length != 0) {
-                const passwordEncriptado = dat[0].password;
-                bcrypt.compare(_password, passwordEncriptado).then(verf => {
-                    if (verf) {
-                        mysql.query(sql, [_emailTrabajadores, passwordEncriptado], (err, data) => {
-                            if (!err) {
-                                const tkn = token.signToken(data[0][0].tipoUsuario);
-                                res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
-                            } else {
-                                res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
-                            }
-                        });
-                    } else {
-                        res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
-                    }
-                })
+                if (dat[0].estadoUsuario == 1) {
+                    const passwordEncriptado = dat[0].password;
+                    bcrypt.compare(_password, passwordEncriptado).then(verf => {
+                        if (verf) {
+                            mysql.query(sql, [_emailTrabajadores, passwordEncriptado], (err, data) => {
+                                if (!err) {
+                                    const tkn = token.signToken(data[0][0].tipoUsuario);
+                                    res.status(200).header('auth-token', tkn).send({ status: "Login correcto", data: data[0][0], code: 200 });
+                                } else {
+                                    res.status(400).send({ status: "Error", message: "Error de conexion", code: 400 });
+                                }
+                            });
+                        } else {
+                            res.status(400).send({ status: "Error", message: "Contraseña incorrecta", code: 400 });
+                        }
+                    })
+                } else {
+                    res.status(400).send({ status: "Error", message: "Trabajador deshabilitado", code: 400 });
+                }
             } else {
                 res.status(400).send({ status: "Error", message: "Email no existente", code: 400 });
             }
